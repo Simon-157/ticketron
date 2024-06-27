@@ -9,10 +9,10 @@ class Event {
   final Organizer organizer;
   final List<AgendaItem> agenda;
   final List<Image> images;
-  final String videoUrl;
+  final String? videoUrl;
   final int ticketsLeft;
   final String category;
-
+  final String? locationMapUrl;
 
   Event({
     required this.id,
@@ -25,10 +25,15 @@ class Event {
     required this.organizer,
     required this.agenda,
     required this.images,
-    required this.videoUrl,
+    this.videoUrl,
     required this.ticketsLeft,
     required this.category,
+    this.locationMapUrl,
   });
+
+
+
+  
 
  bool get isFree {
     return price.regularPrice == 0;
@@ -49,9 +54,15 @@ class Organizer {
   final String name;
   final bool verified;
 
+  String logoUrl;
+
+  String category;
+
   Organizer({
     required this.name,
     required this.verified,
+    required this.logoUrl,
+    required this.category,
   });
 }
 
@@ -61,11 +72,14 @@ class AgendaItem {
   final String startTime;
   final String endTime;
 
+  String speakerImageUrl;
+
   AgendaItem({
     required this.title,
     required this.speaker,
     required this.startTime,
     required this.endTime,
+    required this.speakerImageUrl,
   });
 }
 

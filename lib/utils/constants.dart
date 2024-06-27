@@ -38,6 +38,12 @@ class Constants {
     color: textColor,
   );
 
+   static const TextStyle heading3 = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  );
+  
   static const TextStyle bodyText = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.normal,
@@ -73,6 +79,12 @@ class Constants {
   // Error Messages
   static const String networkError = 'Network error. Please try again later.';
   static const String unknownError = 'An unknown error occurred. Please try again.';
+
+  // button text
+    static const TextStyle buttonText = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+  );
 }
 
 
@@ -113,4 +125,9 @@ class CustomIcons {
   static const String twitter = 'icons/twitter.svg';
   static const String video = 'icons/video.svg';
   static const String notification = 'icons/notification.svg';
+
+  static const String paypal = 'icons/paypal.svg';
+
+
+
 }
