@@ -22,15 +22,17 @@ class _FilterTogglesState extends State<FilterToggles> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(filters.length, (index) {
-        return FilterToggleButton(
-          label: filters[index],
-          isSelected: index == selectedIndex,
-          onTap: () => _onFilterTap(index),
-        );
-      }),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: List.generate(filters.length, (index) {
+          return FilterToggleButton(
+            label: filters[index],
+            isSelected: index == selectedIndex,
+            onTap: () => _onFilterTap(index),
+          );
+        }),
+      ),
     );
   }
 }
@@ -40,7 +42,8 @@ class FilterToggleButton extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
-  const FilterToggleButton({super.key, 
+  const FilterToggleButton({
+    super.key, 
     required this.label,
     required this.isSelected,
     required this.onTap,
@@ -55,6 +58,7 @@ class FilterToggleButton extends StatelessWidget {
           vertical: Constants.paddingSmall,
           horizontal: Constants.paddingMedium,
         ),
+        margin: const EdgeInsets.symmetric(horizontal: Constants.paddingSmall),
         decoration: BoxDecoration(
           color: isSelected ? Constants.primaryColor : Colors.white,
           borderRadius: BorderRadius.circular(Constants.borderRadius),

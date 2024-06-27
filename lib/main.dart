@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ticketron/screens/app/splash_screen.dart';
+// import 'package:ticketron/screens/app/splash_screen.dart';
 import 'package:ticketron/screens/auth/login_screen.dart';
+import 'package:ticketron/shared/page_navigation.dart';
 import 'package:ticketron/utils/constants.dart';
 
 void main() {
@@ -27,7 +28,8 @@ class EventTicketingApp extends StatelessWidget {
             secondary: Constants.accentColor,
             surface: Constants.backgroundColor),
       ),
-      home: const SplashScreen(),
+      // home: const SplashScreen(),
+      home: const PageNavigation(),
       routes: {
         '/login': (context) => LoginPage(),
       },

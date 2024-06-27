@@ -33,7 +33,7 @@ List<Event> upcomingEvents = [
       ),
     ],
     images: [
-      Image(url: 'assets/images/event1.jpg'),
+      Image(url: 'https://wallpapers.com/images/hd/banner-background-b5a2ptzqzslvvuvv.jpg'),
     ],
     videoUrl: '',
     ticketsLeft: 50,
@@ -69,7 +69,7 @@ List<Event> upcomingEvents = [
       ),
     ],
     images: [
-      Image(url: 'assets/images/event2.jpg'),
+      Image(url: 'https://wallpapers.com/images/hd/banner-background-b5a2ptzqzslvvuvv.jpg'),
     ],
     videoUrl: '',
     ticketsLeft: 75,
@@ -108,11 +108,82 @@ List<Event> suggestedEvents = [
       ),
     ],
     images: [
-      Image(url: 'assets/images/event3.jpg'),
+      Image(url: 'https://wallpapers.com/images/hd/banner-background-b5a2ptzqzslvvuvv.jpg'),
     ],
     videoUrl: '',
     ticketsLeft: 100,
     category: 'Design',
   ),
-  // Add more suggested events here
+ Event(
+    id: 34,
+    title: 'Graphic Design Swalla Bigger Event For Creators',
+    date: DateTime(2024, 10, 10),
+    time: '09:00 PM',
+    location: 'Brooklyn, NY',
+    price: Price(
+      premiumPrice: 78.90,
+      regularPrice: 65.00,
+    ),
+    description: 'A grand event for graphic designers to showcase their talents and learn from the best.',
+    organizer: Organizer(
+      name: 'Swalla Designs',
+      verified: true,
+    ),
+    agenda: [
+      AgendaItem(
+        title: 'Keynote Speech',
+        speaker: 'David Lee',
+        startTime: '09:00 PM',
+        endTime: '09:30 PM',
+      ),
+      AgendaItem(
+        title: 'Panel Discussion',
+        speaker: 'Various',
+        startTime: '09:30 PM',
+        endTime: '10:00 PM',
+      ),
+    ],
+    images: [
+      Image(url: 'https://wallpapers.com/images/hd/banner-background-b5a2ptzqzslvvuvv.jpg'),
+    ],
+    videoUrl: '',
+    ticketsLeft: 100,
+    category: 'Design',
+  ),
+  Event(
+    id: 43,
+    title: 'Graphic Design Swalla Bigger Event For Creators',
+    date: DateTime(2024, 10, 10),
+    time: '09:00 PM',
+    location: 'Brooklyn, NY',
+    price: Price(
+      premiumPrice: 78.90,
+      regularPrice: 65.00,
+    ),
+    description: 'A grand event for graphic designers to showcase their talents and learn from the best.',
+    organizer: Organizer(
+      name: 'Swalla Designs',
+      verified: true,
+    ),
+    agenda: [
+      AgendaItem(
+        title: 'Keynote Speech',
+        speaker: 'David Lee',
+        startTime: '09:00 PM',
+        endTime: '09:30 PM',
+      ),
+      AgendaItem(
+        title: 'Panel Discussion',
+        speaker: 'Various',
+        startTime: '09:30 PM',
+        endTime: '10:00 PM',
+      ),
+    ],
+    images: [
+      Image(url: 'https://wallpapers.com/images/hd/banner-background-b5a2ptzqzslvvuvv.jpg'),
+    ],
+    videoUrl: '',
+    ticketsLeft: 100,
+    category: 'Design',
+  ),
 ];

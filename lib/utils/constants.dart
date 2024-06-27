@@ -19,6 +19,11 @@ class Constants {
   static const Color secondaryTextColor = Color(0xFF757575);
   static const Color borderColor = Color(0xFFE0E0E0);
   static const Color errorColor = Color(0xFFB00020);
+  static const Color greyColor = Color.fromARGB(213, 82, 82, 82);
+  static const Color appTextBlue =  Color.fromARGB(255, 0, 63, 238);
+  static const Color highlight =   Color.fromARGB(26, 0, 63, 238);
+
+
 
   // Text Styles
   static const TextStyle heading1 = TextStyle(

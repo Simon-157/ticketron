@@ -1,5 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/data.dart';
@@ -32,7 +33,7 @@ class SuggestionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: Constants.paddingMedium),
-      padding: const EdgeInsets.all(Constants.paddingMedium),
+      padding: const EdgeInsets.all(Constants.paddingSmall),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(Constants.borderRadius),
@@ -46,46 +47,103 @@ class SuggestionCard extends StatelessWidget {
         ],
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+      
         children: [
-          SvgPicture.asset(
-            event.images[0].url,
-            width: 60,
-            height: 60,
-            fit: BoxFit.cover,
+          ClipRRect(
+            borderRadius: const BorderRadius.all(
+               Radius.circular(Constants.borderRadius),
+            ),
+            child: CachedNetworkImage(
+              imageUrl: event.images[0].url,
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+            ),
           ),
-          const SizedBox(width: Constants.paddingMedium),
+          const SizedBox(width: Constants.paddingSmall),
+
           Expanded(
+            
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${event.date.month}/${event.date.day}',
-                  style: Constants.heading2,
-                ),
-                const SizedBox(height: Constants.paddingSmall),
-                Text(
                   event.title,
                   style: Constants.bodyText,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: Constants.paddingSmall),
-                Text(
-                  event.location,
-                  style: Constants.secondaryBodyText,
+                Row(
+                  children: [
+                    const Icon(Icons.location_on, size: 16, color: Constants.secondaryTextColor),
+                    const SizedBox(width: Constants.paddingSmall),
+                    Text(
+                      event.location,
+                      style: const TextStyle(
+                        color: Constants.secondaryTextColor,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Constants.paddingSmall),
+                Row(
+                  children: [
+                    const Icon(Icons.calendar_today, size: 16, color: Constants.secondaryTextColor),
+                    const SizedBox(width: Constants.paddingSmall),
+                    Text(
+                      '${event.date.day} ${_getMonthName(event.date.month)}',
+                      style: const TextStyle(
+                        color: Constants.secondaryTextColor,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
                 if (event.isFree)
-                  const Text(
-                    'FREE',
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: Constants.paddingSmall,
+                        horizontal: Constants.paddingMedium,
+                      ),
+                      decoration: BoxDecoration(
+                        color:Constants.highlight,
+                        borderRadius: BorderRadius.circular(Constants.borderRadius),
+                      ),
+                      child: const Text(
+                        'FREE',
+                        style: TextStyle(
+                          color: Constants.appTextBlue,
+                        
+                        ),
+                      ),
                     ),
                   )
                 else
-                  Text(
-                    '\$${event.price.regularPrice}',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: Constants.paddingSmall,
+                        horizontal: Constants.paddingMedium,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Constants.highlight,
+                        borderRadius: BorderRadius.circular(Constants.borderRadius),
+                      ),
+                      child: Text(
+                        '\$${event.price.regularPrice}',
+                        style: const TextStyle(
+                          color: Constants.appTextBlue,
+                         
+                        ),
+                      ),
                     ),
                   ),
               ],
@@ -93,6 +151,14 @@ class SuggestionCard extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ).animate().fadeIn(duration: 500.ms).scale();
+  }
+
+  String _getMonthName(int month) {
+    List<String> monthNames = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    return monthNames[month - 1];
   }
 }
