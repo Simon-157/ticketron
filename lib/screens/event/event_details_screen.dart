@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/screens/event/get_ticket_screen.dart';
 import 'package:ticketron/utils/constants.dart';
@@ -15,6 +16,17 @@ class EventDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(event.title),
+         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              // Logic for sharing the QR code
+            },
+            icon:  SvgPicture.asset(
+              CustomIcons.menuVertical,
+              height: 24,
+            ),
+          ),],
       ),
       body: Stack(
         children: [

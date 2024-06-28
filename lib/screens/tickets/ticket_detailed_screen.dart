@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ticketron/models/ticket_model.dart';
 import 'package:ticketron/models/event_model.dart';
+import 'package:ticketron/screens/tickets/ticket_qrcode_screen.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/dummydata.dart';
 
@@ -187,7 +188,14 @@ class TicketDetailScreen extends StatelessWidget {
                   ElevatedButton.icon(
                    
                     onPressed: () {
-                      // Logic for showing the QR code
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => QRCodeScreen(ticket: ticket),
+                        )
+
+                      );
+
                     },
                     icon: const Icon(Icons.qr_code,),
                     label: const Text('Show QR Code', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),),

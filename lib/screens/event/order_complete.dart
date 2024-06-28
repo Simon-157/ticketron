@@ -9,7 +9,7 @@ class OrderCompleteScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.close),
+          icon: const Icon(Icons.close),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -26,13 +26,13 @@ class OrderCompleteScreen extends StatelessWidget {
               height: 200,
             ),
             const SizedBox(height: Constants.paddingLarge),
-            Text(
+            const Text(
               'Order Complete',
               style: Constants.heading1,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Constants.paddingSmall),
-            Text(
+            const Text(
               'Your payment was successful!\nSee you at the event',
               style: Constants.bodyText,
               textAlign: TextAlign.center,
@@ -45,7 +45,7 @@ class OrderCompleteScreen extends StatelessWidget {
               },
               child: const Text('View ticket'),
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50),
+                minimumSize: const Size(double.infinity, 50),
                 textStyle: Constants.buttonText,
               ),
             ),
@@ -57,9 +57,9 @@ class OrderCompleteScreen extends StatelessWidget {
               },
               child: const Text('Discover more events'),
               style: OutlinedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50),
+                minimumSize: const Size(double.infinity, 50),
                 textStyle: Constants.buttonText,
-                side: BorderSide(color: Constants.primaryColor),
+                side: const BorderSide(color: Constants.primaryColor),
               ),
             ),
           ],

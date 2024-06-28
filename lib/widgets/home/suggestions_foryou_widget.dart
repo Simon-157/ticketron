@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/data.dart';
+import 'package:ticketron/utils/helpers.dart';
 
 class SuggestionsForYou extends StatelessWidget {
   @override
@@ -13,7 +14,7 @@ class SuggestionsForYou extends StatelessWidget {
       children: [
         const Text(
           'Suggestions for you',
-          style: Constants.heading2,
+          style: Constants.heading3,
         ),
         const SizedBox(height: Constants.paddingMedium),
         Column(
@@ -27,138 +28,138 @@ class SuggestionsForYou extends StatelessWidget {
 class SuggestionCard extends StatelessWidget {
   final Event event;
 
-  const SuggestionCard({super.key, required this.event});
+  SuggestionCard({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: Constants.paddingMedium),
-      padding: const EdgeInsets.all(Constants.paddingSmall),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(Constants.borderRadius),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-      
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.all(
-               Radius.circular(Constants.borderRadius),
-            ),
-            child: CachedNetworkImage(
-              imageUrl: event.images[0].url,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(width: Constants.paddingSmall),
-
-          Expanded(
-            
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  event.title,
-                  style: Constants.bodyText,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: Constants.paddingSmall),
-                Row(
-                  children: [
-                    const Icon(Icons.location_on, size: 16, color: Constants.secondaryTextColor),
-                    const SizedBox(width: Constants.paddingSmall),
-                    Text(
-                      event.location,
-                      style: const TextStyle(
-                        color: Constants.secondaryTextColor,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: Constants.paddingSmall),
-                Row(
-                  children: [
-                    const Icon(Icons.calendar_today, size: 16, color: Constants.secondaryTextColor),
-                    const SizedBox(width: Constants.paddingSmall),
-                    Text(
-                      '${event.date.day} ${_getMonthName(event.date.month)}',
-                      style: const TextStyle(
-                        color: Constants.secondaryTextColor,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-                if (event.isFree)
-                  Align(
-                    alignment: Alignment.bottomRight,
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15.0),
+              child: Stack(
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: event.images[0].url,
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    left: 4,
+                    top: 4,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: Constants.paddingSmall,
-                        horizontal: Constants.paddingMedium,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
-                        color:Constants.highlight,
-                        borderRadius: BorderRadius.circular(Constants.borderRadius),
+                        shape: BoxShape.circle,
+                        color: Colors.white,
                       ),
-                      child: const Text(
-                        'FREE',
-                        style: TextStyle(
-                          color: Constants.appTextBlue,
-                        
-                        ),
-                      ),
-                    ),
-                  )
-                else
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: Constants.paddingSmall,
-                        horizontal: Constants.paddingMedium,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Constants.highlight,
-                        borderRadius: BorderRadius.circular(Constants.borderRadius),
-                      ),
-                      child: Text(
-                        '\$${event.price.regularPrice}',
-                        style: const TextStyle(
-                          color: Constants.appTextBlue,
-                         
-                        ),
+                      child: Column(
+                        children: [
+                          Text(
+                            event.date.day.toString(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 8,
+                            ),
+                          ),
+                          Text(
+                            getMonthName(event.date.month),
+                            style: const TextStyle(
+                              fontSize: 8,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    event.title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 20), 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.location_on,
+                            size: 14,
+                            color: Colors.grey,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            event.location,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (event.isFree)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 1,
+                            horizontal: Constants.paddingSmall,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Constants.highlight,
+                            borderRadius: BorderRadius.circular(Constants.borderRadius),
+                          ),
+                          child: const Text(
+                            'FREE',
+                            style: TextStyle(
+                              color: Constants.appTextBlue,
+                            ),
+                          ),
+                        )
+                      else
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 1,
+                            horizontal: Constants.paddingSmall,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Constants.highlight,
+                            borderRadius: BorderRadius.circular(Constants.borderRadius),
+                          ),
+                          child: Text(
+                            '\$${event.price.regularPrice}',
+                            style: const TextStyle(
+                              color: Constants.appTextBlue,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
-    ).animate().fadeIn(duration: 500.ms).scale();
-  }
-
-  String _getMonthName(int month) {
-    List<String> monthNames = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
-    return monthNames[month - 1];
+    ).animate().fade(duration: 850.ms).slideY(
+            begin: 0.5,
+            duration: 850.ms,
+            curve: Curves.easeInOutCubic,
+          );
   }
 }

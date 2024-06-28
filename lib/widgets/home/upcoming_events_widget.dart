@@ -15,7 +15,7 @@ class UpcomingEvents extends StatelessWidget {
       children: [
         const Text(
           'Upcoming events',
-          style: Constants.heading2,
+          style: Constants.heading3,
         ),
         const SizedBox(height: Constants.paddingMedium),
         SingleChildScrollView(

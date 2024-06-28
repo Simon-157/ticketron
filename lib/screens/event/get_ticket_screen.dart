@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/screens/event/register_event.dart';
 import 'package:ticketron/utils/constants.dart';
@@ -29,6 +30,17 @@ class _GetTicketScreenState extends State<GetTicketScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Get a Ticket'),
+         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              // Logic for sharing the QR code
+            },
+            icon:  SvgPicture.asset(
+              CustomIcons.menuVertical,
+              height: 24,
+            ),
+          ),],
       ),
       body: Column(
         children: [

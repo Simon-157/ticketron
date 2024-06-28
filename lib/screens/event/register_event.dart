@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/screens/event/order_screen.dart';
@@ -27,7 +28,18 @@ class _ContactInformationScreenState extends State<ContactInformationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Contact Information'),
+        title: const Text('Register Event'),
+         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              // Logic for sharing the QR code
+            },
+            icon:  SvgPicture.asset(
+              CustomIcons.menuVertical,
+              height: 24,
+            ),
+          ),],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(Constants.paddingLarge),

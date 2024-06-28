@@ -16,6 +16,17 @@ class DetailOrderScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detail Order'),
+         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              // Logic for sharing the QR code
+            },
+            icon:  SvgPicture.asset(
+              CustomIcons.menuVertical,
+              height: 24,
+            ),
+          ),],
       ),
       body: Stack(
         children: [
