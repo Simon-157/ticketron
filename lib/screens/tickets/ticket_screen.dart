@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/models/ticket_model.dart';
+import 'package:ticketron/screens/tickets/ticket_detailed_screen.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/dummydata.dart';
 import 'package:ticketron/utils/helpers.dart';
@@ -51,12 +52,19 @@ class _TicketsScreenState extends State<TicketsScreen> {
               itemBuilder: (context, index) {
                 Ticket ticket = filteredTickets[index];
                 Event event = getEventForTicket(ticket.eventId);
-                return TicketCard(
+
+                return GestureDetector(
+                  onTap: () { 
+                    
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => TicketDetailScreen(ticket: ticket)));
+                   },
+                  child: TicketCard(
+        
                   eventTitle: event.title,
                   time: event.time,
                   seat: ticket.seat,
                   ticketType: ticket.ticketType,
-                );
+                ));
               },
             ),
           ),

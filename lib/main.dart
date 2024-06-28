@@ -32,6 +32,9 @@ class EventTicketingApp extends StatelessWidget {
       home: const PageNavigation(),
       routes: {
         '/login': (context) => LoginPage(),
+        '/home': (context) => const PageNavigation(),
+        '/event': (context) => const PageNavigation(),
+        '/explore': (context) => const PageNavigation(),
       },
     );
   }

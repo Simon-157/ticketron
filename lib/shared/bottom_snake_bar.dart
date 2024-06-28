@@ -43,7 +43,7 @@ class BottomSnakeBar extends StatelessWidget {
                 ? Colors.white
                 : Colors.grey.withOpacity(0.8),
           ),
-          label: 'search',
+          label: 'explore',
         ),
         BottomNavigationBarItem(
           icon: SvgPicture.asset(
