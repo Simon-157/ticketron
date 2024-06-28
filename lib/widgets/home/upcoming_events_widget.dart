@@ -4,7 +4,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/screens/event/event_details_screen.dart';
 import 'package:ticketron/utils/constants.dart';
-import 'package:ticketron/utils/data.dart';
+import 'package:ticketron/utils/dummydata.dart';
+// import 'package:ticketron/utils/data.dart';
 
 class UpcomingEvents extends StatelessWidget {
   @override
@@ -21,7 +22,7 @@ class UpcomingEvents extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children:
-                upcomingEvents.map((event) => EventCard(event: event)).toList(),
+                events.map((event) => EventCard(event: event)).toList(),
           ),
         ),
       ],

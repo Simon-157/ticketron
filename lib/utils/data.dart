@@ -1,5 +1,6 @@
 import 'package:ticketron/models/event_model.dart';
 
+
 const String defaultImageUrl = "https://avatars.githubusercontent.com/u/79936608?v=4";
 const String defaultVideoUrl = "https://www.youtube.com/watch?v=3OUYkCkrApE";
 
@@ -208,3 +209,8 @@ List<Event> suggestedEvents = [
     category: 'Design',
   ),
 ];
+
+
+
+
+// Sample Users

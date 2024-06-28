@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/screens/event/get_ticket_screen.dart';
 import 'package:ticketron/utils/constants.dart';
+import 'package:ticketron/utils/helpers.dart';
 
 class EventDetailsPage extends StatelessWidget {
   final Event event;
@@ -89,7 +90,7 @@ class EventInfoSection extends StatelessWidget {
             const Icon(Icons.calendar_today, size: 16, color: Constants.greyColor),
             const SizedBox(width: Constants.paddingSmall),
             Text(
-              '${event.date.day} ${_getMonthName(event.date.month)} ${event.date.year}',
+              '${event.date.day} ${getMonthName(event.date.month)} ${event.date.year}',
               style: Constants.bodyText,
             ),
           ],
@@ -120,23 +121,6 @@ class EventInfoSection extends StatelessWidget {
     );
   }
 
-  String _getMonthName(int month) {
-    List<String> monthNames = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
-    return monthNames[month - 1];
-  }
 }
 
 class EventDescriptionSection extends StatelessWidget {

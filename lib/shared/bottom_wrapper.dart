@@ -21,10 +21,10 @@ class _BottomNavWrapperState extends State<BottomNavWrapper> {
 
   final List<Widget> _widgetOptions =  <Widget>[
      HomeScreen(),
-     ExploreScreen(),
-     FavoriteScreen(),
-     TicketScreen(),
-     ProfileScreen(),
+     const ExploreScreen(),
+     const FavoriteScreen(),
+     TicketsScreen(),
+     const ProfileScreen(),
     
     
   ];

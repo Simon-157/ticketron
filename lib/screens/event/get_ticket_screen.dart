@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/screens/event/register_event.dart';
 import 'package:ticketron/utils/constants.dart';
+import 'package:ticketron/utils/helpers.dart';
 
 class GetTicketScreen extends StatefulWidget {
   final Event event;
@@ -104,7 +105,7 @@ class _DatePickerState extends State<DatePicker> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    _getMonthName(date.month),
+                    getMonthName(date.month),
                     style: TextStyle(
                       color: isSelected ? Colors.white : Colors.grey,
                     ),
@@ -119,7 +120,7 @@ class _DatePickerState extends State<DatePicker> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    _getWeekDayName(date.weekday),
+                    getWeekDayName(date.weekday),
                     style: TextStyle(
                       color: isSelected ? Colors.white : Colors.grey,
                     ),
@@ -133,36 +134,6 @@ class _DatePickerState extends State<DatePicker> {
     );
   }
 
-  String _getMonthName(int month) {
-    List<String> monthNames = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
-    return monthNames[month - 1];
-  }
-
-  String _getWeekDayName(int weekday) {
-    List<String> weekDayNames = [
-      'Mon',
-      'Tue',
-      'Wed',
-      'Thu',
-      'Fri',
-      'Sat',
-      'Sun'
-    ];
-    return weekDayNames[weekday - 1];
-  }
 }
 
 class TicketTypeSection extends StatefulWidget {

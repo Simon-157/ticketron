@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/screens/event/order_complete.dart';
 import 'package:ticketron/utils/constants.dart';
+import 'package:ticketron/utils/helpers.dart';
 
 class DetailOrderScreen extends StatelessWidget {
   final Event event;
@@ -90,7 +91,7 @@ class EventDetailCard extends StatelessWidget {
                     const Icon(Icons.calendar_today, size: 16, color: Constants.greyColor),
                     const SizedBox(width: Constants.paddingSmall),
                     Text(
-                      '${_getFormattedDate(event.date)}',
+                      '${getFormattedDate(event.date)}',
                       style: Constants.secondaryBodyText,
                     ),
                   ],
@@ -114,13 +115,7 @@ class EventDetailCard extends StatelessWidget {
     );
   }
 
-  String _getFormattedDate(DateTime date) {
-    List<String> monthNames = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
-    return '${monthNames[date.month - 1]} ${date.day}, ${date.year}';
-  }
+
 }
 
 class OrderSummary extends StatelessWidget {
