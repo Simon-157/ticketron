@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/dummydata.dart';
-import 'package:ticketron/utils/helpers.dart';
 import 'package:ticketron/widgets/home/suggestions_foryou_widget.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -22,8 +20,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   void initState() {
     super.initState();
-    filteredEvents = events; // Initialize the filtered events list
-    _applyFilters(); // Apply filters to initialize the list correctly
+    filteredEvents = events;
+    _applyFilters();
   }
 
   @override
@@ -136,7 +134,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 }
 
 class SearchBar extends StatelessWidget {
-  final String selectedLocation; // Add this line to pass the selected location
+  final String selectedLocation;
   final Function(String) onSearchChanged;
   final Function(String) onLocationChanged;
 
@@ -168,32 +166,46 @@ class SearchBar extends StatelessWidget {
               onChanged: onSearchChanged,
             ),
           ),
-          const VerticalDivider(color: Colors.grey),
-          const Icon(Icons.location_on, color: Colors.blue),
-          const SizedBox(width: 8),
-          DropdownButton<String>(
-            value:
-                selectedLocation, // Bind the DropdownButton to the selectedLocation
-            underline: Container(),
-            onChanged: (String? newValue) {
-              if (newValue != null) {
-                onLocationChanged(newValue);
-              }
-            },
-            items: <String>['California', 'New York', 'Brooklyn']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(
-                  value,
-                  style: const TextStyle(color: Colors.blue),
+          Container(
+            height: 30,
+            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+            decoration: BoxDecoration(
+              color: Constants.primaryColor,
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Row(
+              children: [
+                // VerticalDivider(color: Colors.grey),
+                Icon(Icons.location_on,
+                    color: Color.fromARGB(255, 250, 251, 252)),
+                SizedBox(width: 8),
+                DropdownButton<String>(
+                  dropdownColor:  Color.fromARGB(255, 162, 163, 163),
+                  value: selectedLocation,
+                  underline: Container(),
+                  onChanged: (String? newValue) {
+                    if (newValue != null) {
+                      onLocationChanged(newValue);
+                    }
+                  },
+                  items: <String>['California', 'New York', 'Brooklyn']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+
+                      value: value,
+                      child: Text(
+                        value,
+                        style:
+                            TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                      ),
+                    );
+                  }).toList(),
                 ),
-              );
-            }).toList(),
-          ),
+              ],
+            ),
+          )
         ],
       ),
     );
   }
 }
-
