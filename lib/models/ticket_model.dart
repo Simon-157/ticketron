@@ -25,6 +25,3 @@ class Ticket {
     required this.qrcode,
   });
 }
-
-
-

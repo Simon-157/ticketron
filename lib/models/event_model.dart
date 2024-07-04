@@ -90,5 +90,3 @@ class Image {
     required this.url,
   });
 }
-
-
