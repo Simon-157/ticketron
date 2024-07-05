@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:ticketron/screens/explore/explore_screen.dart';
 import 'package:ticketron/screens/favorites/favorite_screen.dart';
 import 'package:ticketron/screens/home/home_screen.dart';
+import 'package:ticketron/screens/organizer_screens/organizer_dashboard.dart';
 import 'package:ticketron/screens/profile/profile_screen.dart';
 import 'package:ticketron/screens/tickets/ticket_screen.dart';
 import 'package:ticketron/shared/bottom_snake_bar.dart';
@@ -22,7 +23,7 @@ class _BottomNavWrapperState extends State<BottomNavWrapper> {
   final List<Widget> _widgetOptions =  <Widget>[
      HomeScreen(),
      const ExploreScreen(),
-     const FavoriteScreen(),
+     OrganizerDashboardScreen(),
      TicketsScreen(),
      const ProfileScreen(),
     

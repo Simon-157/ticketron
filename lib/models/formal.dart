@@ -55,6 +55,7 @@ class Message {
 }
 
 class Organizer {
+  final String organizerId;
   final String name;
   final bool isVerified;
   final String logoUrl;
@@ -62,11 +63,12 @@ class Organizer {
   final String about;
 
   Organizer({
+    required this.organizerId,
     required this.name,
     required this.isVerified,
     required this.logoUrl,
     required this.category,
-    required this.about,
+    required this.about
   });
 }
 
@@ -85,7 +87,7 @@ class User {
 }
 
 class Event {
-  final int eventId;
+  final String eventId;
   final String title;
   final DateTime date;
   final String time;
@@ -99,6 +101,7 @@ class Event {
   final int ticketsLeft;
   final String category;
   final String? locationMapUrl;
+  final int totalCapacityNeeded;
 
   Event({
     required this.eventId,
@@ -111,11 +114,18 @@ class Event {
     required this.organizer,
     required this.agenda,
     required this.images,
-    this.videoUrl,
     required this.ticketsLeft,
     required this.category,
+    required this.totalCapacityNeeded,
+    this.videoUrl,
     this.locationMapUrl,
   });
+
+
+
+ bool get isFree {
+    return price.regularPrice == 0;
+  }
 }
 
 class Price {

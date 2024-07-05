@@ -18,6 +18,9 @@ String getRandomAvatar() {
 }
 
 
+
+
+
 // Dummy data for events and tickets
 List<Event> events = [
   Event(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/dummydata.dart';
-import 'package:ticketron/widgets/home/suggestions_foryou_widget.dart';
+import 'package:ticketron/widgets/home/suggestion_event_card.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
