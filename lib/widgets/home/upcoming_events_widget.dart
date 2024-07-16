@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/utils/constants.dart';
-import 'package:ticketron/utils/dummydata.dart';
+import 'package:ticketron/utils/organizer_data.dart';
 import 'package:ticketron/widgets/home/main_event_card.dart';
 
 class UpcomingEvents extends StatelessWidget {
@@ -18,7 +19,7 @@ class UpcomingEvents extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children:
-                events.map((event) => EventCard(event: event)).toList(),
+                dummyEvents.map((event) => EventCard(event: event as Event)).toList(),
           ),
         ),
       ],

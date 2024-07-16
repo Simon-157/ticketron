@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -26,7 +25,7 @@ class SuggestionCard extends StatelessWidget {
               child: Stack(
                 children: [
                   CachedNetworkImage(
-                    imageUrl: event.images[0].url,
+                    imageUrl: event.images[0],
                     width: 80,
                     height: 80,
                     fit: BoxFit.cover,
@@ -36,7 +35,7 @@ class SuggestionCard extends StatelessWidget {
                     top: 4,
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white,
                       ),
@@ -73,62 +72,52 @@ class SuggestionCard extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 20), 
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.location_on,
-                            size: 14,
-                            color: Colors.grey,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            event.location,
-                            style: const TextStyle(
-                              fontSize: 12,
+                      Flexible(
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.location_on,
+                              size: 14,
                               color: Colors.grey,
                             ),
-                          ),
-                        ],
-                      ),
-                      if (event.isFree)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 1,
-                            horizontal: Constants.paddingSmall,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Constants.highlight,
-                            borderRadius: BorderRadius.circular(Constants.borderRadius),
-                          ),
-                          child: const Text(
-                            'FREE',
-                            style: TextStyle(
-                              color: Constants.appTextBlue,
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: Text(
+                                event.location,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                          ),
-                        )
-                      else
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 1,
-                            horizontal: Constants.paddingSmall,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Constants.highlight,
-                            borderRadius: BorderRadius.circular(Constants.borderRadius),
-                          ),
-                          child: Text(
-                            '\$${event.price.regularPrice}',
-                            style: const TextStyle(
-                              color: Constants.appTextBlue,
-                            ),
-                          ),
+                          ],
                         ),
+                      ),
+                      const SizedBox(width: 4),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 1,
+                          horizontal: Constants.paddingSmall,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Constants.highlight,
+                          borderRadius: BorderRadius.circular(Constants.borderRadius),
+                        ),
+                        child: Text(
+                          event.isFree ? 'FREE' : '\$${event.price.regularPrice}',
+                          style: const TextStyle(
+                            color: Constants.appTextBlue,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                     ],
                   ),
                 ],

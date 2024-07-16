@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ticketron/screens/tickets/ticket_detailed_screen.dart';
 import 'package:ticketron/utils/constants.dart';
-import 'package:ticketron/utils/dummydata.dart';
+import 'package:ticketron/utils/organizer_data.dart';
 
 class OrderCompleteScreen extends StatelessWidget {
   @override

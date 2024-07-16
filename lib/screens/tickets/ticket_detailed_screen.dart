@@ -4,15 +4,15 @@ import 'package:ticketron/models/ticket_model.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/screens/tickets/ticket_qrcode_screen.dart';
 import 'package:ticketron/utils/constants.dart';
-import 'package:ticketron/utils/dummydata.dart';
+import 'package:ticketron/utils/organizer_data.dart';
 
 class TicketDetailScreen extends StatelessWidget {
   final Ticket ticket;
 
   TicketDetailScreen({required this.ticket});
 
-  Event getEventForTicket(int eventId) {
-    return events.firstWhere((event) => event.id == eventId);
+  Event getEventForTicket(String eventId) {
+    return dummyEvents.firstWhere((event) => event.eventId == eventId);
   }
 
   @override
@@ -49,7 +49,7 @@ class TicketDetailScreen extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(15.0),
                         child: CachedNetworkImage(
-                          imageUrl: event.images[0].url,
+                          imageUrl: event.images[0],
                           height: 200,
                           fit: BoxFit.cover,
                         ),

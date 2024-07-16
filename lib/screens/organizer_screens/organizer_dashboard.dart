@@ -1,37 +1,88 @@
 import 'package:flutter/material.dart';
-import 'package:ticketron/models/formal.dart';
+import 'package:ticketron/models/event_model.dart';
+import 'package:ticketron/models/organizer_model.dart';
 import 'package:ticketron/screens/organizer_screens/attendance_screen.dart';
+import 'package:ticketron/services/auth_service.dart';
 import 'package:ticketron/utils/organizer_data.dart';
 import 'package:ticketron/widgets/organizer_view_widgets/organizer_event_card.dart'; 
 
-class OrganizerDashboardScreen extends StatelessWidget {
+class OrganizerDashboardScreen extends StatefulWidget {
+
+  const OrganizerDashboardScreen({super.key});
+
+  @override
+  State<OrganizerDashboardScreen> createState() => _OrganizerDashboardScreenState();
+}
+
+class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> {
+  final AuthService _authService = AuthService();
+  late Organizer organizer;
+
+  @override
+  void initState() {
+    super.initState();
+    _authService.getOrganizerDetails(_authService.getCurrentUser()!.uid).then((value) {
+      setState(() {
+        organizer = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Dashboard', style: TextStyle(fontSize: 18.0)),
+        elevation: 2.0,
+        // backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false, 
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CircleAvatar(
+            radius: 10.0,
+            backgroundImage: NetworkImage(organizer.logoUrl, scale: 0.1),
+          ),
+        ),
+        title:  Text("${organizer.name}'s Dashboard ", style: const TextStyle(fontSize: 18.0)),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.notifications),
-            onPressed: () {
-              // notification handling
-            },
+          Stack(
+            children: [
+              IconButton(
+          tooltip: 'Notifications',
+          icon: const Icon(Icons.notifications, color: Colors.blueAccent,),
+          onPressed: () {
+            // notification handling
+          },
+              ),
+              Positioned(
+          top: 12,
+          right: 17,
+          child: Container(
+            width: 7,
+            height: 7,
+            decoration: const BoxDecoration(
+              color: Colors.red,
+              shape: BoxShape.circle,
+            ),
+          ),
+              ),
+            ],
           ),
         ],
+        
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             // SizedBox(height: 20.0), 
-            Text(
+            const Text(
               'Current Events',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Container(
               height: 200.0, 
               child: ListView.builder(
@@ -43,12 +94,12 @@ class OrganizerDashboardScreen extends StatelessWidget {
                 },
               ),
             ),
-            SizedBox(height: 20.0),
-            Text(
+            const SizedBox(height: 20.0),
+            const Text(
               'Statistics',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
             child: Row(
@@ -61,13 +112,13 @@ class OrganizerDashboardScreen extends StatelessWidget {
                   count: dummyEvents.where((event) => event.date.isAfter(DateTime.now())).length,
                 ),
 
-                SizedBox(width: 16.0),
+                const SizedBox(width: 16.0),
                 _buildStatisticCard(
                   context,
                   title: 'Past',
                   count: dummyEvents.where((event) => event.date.isBefore(DateTime.now())).length,
                 ),
-                 SizedBox(width: 16.0),
+                 const SizedBox(width: 16.0),
                 _buildStatisticCard(
                   context,
                   title: 'Audience',
@@ -80,10 +131,11 @@ class OrganizerDashboardScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0, // Set initial index as needed
+        currentIndex: 0, 
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
-        items: [
+        showUnselectedLabels: true,
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.event),
             label: 'Events',
@@ -93,8 +145,8 @@ class OrganizerDashboardScreen extends StatelessWidget {
             label: 'Messages',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+            icon: Icon(Icons.add),
+            label: 'Add Event',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
@@ -128,7 +180,7 @@ class OrganizerDashboardScreen extends StatelessWidget {
 
   Widget _buildStatisticCard(context, {required String title, required int count}) {
     return Container(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       width: MediaQuery.of(context).size.width * 0.3,
       height: 80.0,
       decoration: BoxDecoration(
@@ -140,12 +192,12 @@ class OrganizerDashboardScreen extends StatelessWidget {
         children: <Widget>[
           Text(
             title,
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.blue),
+            style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.blue),
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Text(
             '$count',
-            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.blue),
+            style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.blue),
           ),
         ],
       ),

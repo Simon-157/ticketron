@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "785197558142",
+    "project_id": "ticketronapp",
+    "storage_bucket": "ticketronapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:785197558142:android:5a1ff8908dd257c29e2b2f",
+        "android_client_info": {
+          "package_name": "com.example.ticketron"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "785197558142-0o5pksa4i6tja893d4hr6gdu92di80o7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ticketron",
+            "certificate_hash": "b28ec4160a9e68d2fe32f803b267dd99fcd327eb"
+          }
+        },
+        {
+          "client_id": "785197558142-ini1atlmsabo3so58cc3e1la80mjs96i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyQnquDmEPNPJrt-cVbO-XZnFEQ1YmmyA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "785197558142-ini1atlmsabo3so58cc3e1la80mjs96i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

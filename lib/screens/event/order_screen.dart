@@ -82,7 +82,7 @@ class EventDetailCard extends StatelessWidget {
       child: Row(
         children: [
           CachedNetworkImage(
-            imageUrl: event.images[0].url,
+            imageUrl: event.images[0],
             width: 80,
             height: 80,
             fit: BoxFit.cover,

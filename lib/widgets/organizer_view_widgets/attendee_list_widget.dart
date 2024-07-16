@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ticketron/models/formal.dart';
+import 'package:ticketron/models/user_model.dart';
 
 class AttendanceListWidget extends StatelessWidget {
-  final List<User> attendees;
+  final List<UserModel> attendees;
 
   AttendanceListWidget({required this.attendees});
 
@@ -34,7 +34,7 @@ class AttendanceListWidget extends StatelessWidget {
             shrinkWrap: true,
             itemCount: attendees.length,
             itemBuilder: (context, index) {
-              User attendee = attendees[index];
+              UserModel attendee = attendees[index];
               return ListTile(
                 leading: CircleAvatar(
                   backgroundImage: NetworkImage(attendee.avatarUrl),

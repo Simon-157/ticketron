@@ -6,6 +6,8 @@ import 'package:ticketron/screens/event/get_ticket_screen.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/helpers.dart';
 
+import '../../models/organizer_model.dart';
+
 class EventDetailsPage extends StatelessWidget {
   final Event event;
 
@@ -72,7 +74,7 @@ class EventImageSection extends StatelessWidget {
       borderRadius: BorderRadius.circular(Constants.borderRadius),
       child: CachedNetworkImage(
         imageUrl: event.images.isNotEmpty
-            ? event.images[0].url
+            ? event.images[0]
             : "https://avatars.githubusercontent.com/u/79936608?v=4",
         width: double.infinity,
         height: 250,
@@ -184,7 +186,7 @@ class OrganizerSection extends StatelessWidget {
               style: Constants.heading3,
             ),
             const SizedBox(height: Constants.paddingSmall),
-            if (organizer.verified)
+            if (organizer.isVerified)
               const Text(
                 'Verified',
                 style: TextStyle(

@@ -23,6 +23,7 @@ class EventCard extends StatelessWidget {
           ),
         );
       },
+      
       child: Container(
         width: 250,
         margin: const EdgeInsets.only(right: Constants.paddingMedium),
@@ -43,7 +44,7 @@ class EventCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(Constants.borderRadius),
               child: CachedNetworkImage(
-                imageUrl: event.images[0].url,
+                imageUrl: event.images[0],
                 width: double.infinity,
                 height: 250,
                 fit: BoxFit.cover,
@@ -88,24 +89,34 @@ class EventCard extends StatelessWidget {
                     Text(
                       event.title,
                       style: Constants.bodyText,
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: Constants.paddingSmall),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(children: [
-                          const Icon(Icons.location_on,
-                              size: 16, color: Constants.greyColor),
-                          const SizedBox(width: Constants.paddingSmall),
-                          Text(
-                            event.location,
-                            style: const TextStyle(
-                              color: Constants.secondaryTextColor,
-                            ),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.location_on,
+                                size: 16,
+                                color: Constants.greyColor,
+                              ),
+                              const SizedBox(width: Constants.paddingSmall),
+                              Expanded(
+                                child: Text(
+                                  event.location,
+                                  style: const TextStyle(
+                                    color: Constants.secondaryTextColor,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
                           ),
-                        ]),
+                        ),
                         if (event.isFree)
                           Container(
                             padding: const EdgeInsets.symmetric(
@@ -113,14 +124,13 @@ class EventCard extends StatelessWidget {
                               horizontal: 8,
                             ),
                             decoration: BoxDecoration(
-                              color: Color.fromARGB(26, 0, 63, 238),
+                              color: const Color.fromARGB(26, 0, 63, 238),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: const Text(
                               'FREE',
                               style: TextStyle(
                                 color: Color.fromARGB(255, 0, 63, 238),
-                              
                               ),
                             ),
                           )
@@ -131,14 +141,13 @@ class EventCard extends StatelessWidget {
                               horizontal: 8,
                             ),
                             decoration: BoxDecoration(
-                               color: Color.fromARGB(26, 0, 63, 238),
+                              color: const Color.fromARGB(26, 0, 63, 238),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
                               '\$${event.price.regularPrice}',
                               style: const TextStyle(
-                                                              color: Color.fromARGB(255, 0, 63, 238),
-
+                                color: Color.fromARGB(255, 0, 63, 238),
                               ),
                             ),
                           ),

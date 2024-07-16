@@ -4,15 +4,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ticketron/models/ticket_model.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/utils/constants.dart';
-import 'package:ticketron/utils/dummydata.dart';
+import 'package:ticketron/utils/organizer_data.dart';
 
 class QRCodeScreen extends StatelessWidget {
   final Ticket ticket;
 
   QRCodeScreen({required this.ticket});
 
-  Event getEventForTicket(int eventId) {
-    return events.firstWhere((event) => event.id == eventId);
+  Event getEventForTicket(String eventId) {
+    return dummyEvents.firstWhere((event) => event.eventId == eventId);
   }
 
   @override
@@ -65,7 +65,7 @@ class QRCodeScreen extends StatelessWidget {
                             child: Row(
                               children: [
                                 CachedNetworkImage(
-                                  imageUrl: event.images[0].url,
+                                  imageUrl: event.images[0],
                                   height: 80,
                                   width: 80,
                                   fit: BoxFit.cover,

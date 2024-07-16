@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ticketron/utils/constants.dart';
-import 'package:ticketron/utils/data.dart';
+import 'package:ticketron/utils/organizer_data.dart';
 import 'package:ticketron/widgets/home/suggestion_event_card.dart';
 
 class SuggestionsForYou extends StatelessWidget {
+  const SuggestionsForYou({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -15,7 +17,7 @@ class SuggestionsForYou extends StatelessWidget {
         ),
         const SizedBox(height: Constants.paddingMedium),
         Column(
-          children: suggestedEvents.map((event) => SuggestionCard(event: event)).toList(),
+          children: dummyEvents.map((event) => SuggestionCard(event: event)).toList(),
         ),
       ],
     );

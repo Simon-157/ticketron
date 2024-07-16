@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ticketron/models/formal.dart';
+import 'package:ticketron/models/user_model.dart';
 import 'package:ticketron/utils/organizer_data.dart';
 import 'package:ticketron/widgets/organizer_view_widgets/barcode_scanner_widget.dart';
 import 'package:ticketron/widgets/organizer_view_widgets/qr_code_scanner_widget.dart';
@@ -10,11 +10,11 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
-  List<User> users = usersData;
+  List<UserModel> users = usersData;
   void handleBarcodeDetected(String code) {
     print('Barcode detected: $code');
     // Simulate fetching user details from a database or API
-    User user = User(
+    UserModel user = UserModel(
       name: 'Jane Smith',
       email: 'jane.smith@example.com',
       avatarUrl: 'https://randomuser.me/api/portraits/women/1.jpg',
@@ -26,7 +26,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   Future<bool> handleQRCodeDetected(String code) async {
     print('QR code detected: $code');
     // Simulate fetching user details from a database or API
-    User user = User(
+    UserModel user = UserModel(
       name: 'Jane Smith',
       email: 'jane.smith@example.com',
       avatarUrl: 'https://randomuser.me/api/portraits/women/1.jpg',
@@ -34,12 +34,12 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
     registerAttendee(user);
 
-    await Future.delayed(Duration(seconds: 2)); // Simulate API call or processing time
+    await Future.delayed(const Duration(seconds: 2)); // Simulate API call or processing time
 
     return true;
   }
 
-  void registerAttendee(User attendee) {
+  void registerAttendee(UserModel attendee) {
     setState(() {
       users.add(attendee);
     });
@@ -49,7 +49,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Event Attendance', style: TextStyle(fontSize: 18.0)),
+        title: const Text('Event Attendance', style: TextStyle(fontSize: 18.0)),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -57,12 +57,12 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           _buildActionButtons(), // Custom styled action buttons
           Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  SizedBox(height: 20.0),
-                  Text(
+                  const SizedBox(height: 20.0),
+                  const Text(
                     'Attendees',
                     style: TextStyle(
                       fontSize: 24.0,
@@ -70,8 +70,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                       color: Colors.blueAccent,
                     ),
                   ),
-                  SizedBox(height: 10.0),
-                  _buildAttendeeList(), // Aesthetically designed attendee list
+                  const SizedBox(height: 10.0),
+                  _buildAttendeeList(),
                 ],
               ),
             ),
@@ -83,7 +83,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   Widget _buildActionButtons() {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -129,14 +129,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.blueAccent,
-        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
       ),
       child: Text(
         label,
-        style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.white),
+        style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.white),
       ),
     );
   }
@@ -149,25 +149,25 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       ),
       child: ListView.separated(
         shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: users.length,
         separatorBuilder: (context, index) => Divider(height: 0.0, color: Colors.grey[300]),
         itemBuilder: (context, index) {
           return ListTile(
-            contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             leading: CircleAvatar(
               radius: 24.0,
               backgroundImage: NetworkImage(users[index].avatarUrl),
             ),
             title: Text(
               users[index].name,
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             subtitle: Text(
               users[index].email,
-              style: TextStyle(fontSize: 14.0),
+              style: const TextStyle(fontSize: 14.0),
             ),
-            trailing: Icon(Icons.check_circle, color: Colors.green),
+            trailing: const Icon(Icons.check_circle, color: Colors.green),
           );
         },
       ),

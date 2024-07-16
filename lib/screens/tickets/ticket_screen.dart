@@ -3,8 +3,8 @@ import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/models/ticket_model.dart';
 import 'package:ticketron/screens/tickets/ticket_detailed_screen.dart';
 import 'package:ticketron/utils/constants.dart';
-import 'package:ticketron/utils/dummydata.dart';
 import 'package:ticketron/utils/helpers.dart';
+import 'package:ticketron/utils/organizer_data.dart';
 import 'package:ticketron/widgets/tickets/tab_bar.dart';
 import 'package:ticketron/widgets/tickets/ticketcard.dart';
 
@@ -24,8 +24,8 @@ class _TicketsScreenState extends State<TicketsScreen> {
     }
   }
 
-  Event getEventForTicket(int eventId) {
-    return events.firstWhere((event) => event.id == eventId);
+  Event getEventForTicket(String eventId) {
+    return dummyEvents.firstWhere((event) => event.eventId == eventId);
   }
 
   @override

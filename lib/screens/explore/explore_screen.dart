@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/utils/constants.dart';
-import 'package:ticketron/utils/dummydata.dart';
+import 'package:ticketron/utils/organizer_data.dart';
 import 'package:ticketron/widgets/home/suggestion_event_card.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -20,7 +20,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   void initState() {
     super.initState();
-    filteredEvents = events;
+    filteredEvents = dummyEvents;
     _applyFilters();
   }
 
@@ -76,18 +76,18 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   void _applyFilters() {
     setState(() {
-      List<Event> eventsBySearch = events
+      List<Event> eventsBySearch = dummyEvents
           .where((event) =>
               event.title.toLowerCase().contains(searchQuery.toLowerCase()))
           .toList();
 
-      List<Event> eventsByLocation = events
+      List<Event> eventsByLocation = dummyEvents
           .where((event) => event.location
               .toLowerCase()
               .contains(selectedLocation.toLowerCase()))
           .toList();
 
-      List<Event> eventsByCategory = events
+      List<Event> eventsByCategory =  dummyEvents
           .where((event) =>
               selectedCategory.isEmpty ||
               event.category
