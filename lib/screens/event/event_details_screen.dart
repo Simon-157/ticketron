@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/screens/event/get_ticket_screen.dart';
 import 'package:ticketron/screens/organizer_screens/attendance_screen.dart';
+import 'package:ticketron/screens/organizer_screens/edit_event_screen.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/helpers.dart';
 
@@ -252,7 +253,7 @@ class AgendaCard extends StatelessWidget {
 class EventLocationSection extends StatelessWidget {
   final String location;
 
-  EventLocationSection({required this.location});
+  const EventLocationSection({super.key, required this.location});
 
   @override
   Widget build(BuildContext context) {
@@ -311,7 +312,7 @@ class TicketPurchaseSection extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => role == 'organizer' ? AttendanceScreen() : GetTicketScreen(event: event),
+                  builder: (context) => EventEditScreen(event: event, ),
                 ),
               );
             },

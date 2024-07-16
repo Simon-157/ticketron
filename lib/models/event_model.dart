@@ -6,20 +6,20 @@ import 'package:flutter/foundation.dart';
 import 'package:ticketron/models/organizer_model.dart';
 
 class Event {
-  final String eventId;
-  final String title;
-  final DateTime date;
-  final String time;
-  final String location;
-  final Price price;
-  final String description;
-  final Organizer? organizer;
+   String eventId;
+   String title;
+   DateTime date;
+   String time;
+   String location;
+   Price price;
+   String description;
+   Organizer? organizer;
    List<AgendaItem> agenda;
-  final List<String> images;
-  final String? videoUrl;
-  final int ticketsLeft;
+   List<String> images;
+   String? videoUrl;
+   int ticketsLeft;
   String category;
-  final String? locationMapUrl;
+   String? locationMapUrl;
    int totalCapacityNeeded;
 
 
@@ -181,8 +181,8 @@ class Event {
 }
 
 class Price {
-  final double premiumPrice;
-  final double regularPrice;
+   double premiumPrice;
+   double regularPrice;
 
   Price({
     required this.premiumPrice,

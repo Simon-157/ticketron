@@ -54,11 +54,11 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
             
             child: CircleAvatar(
             radius: 10.0,
-            backgroundImage: NetworkImage(organizer!.logoUrl, scale: 0.1),
+            backgroundImage: NetworkImage(organizer?.logoUrl ?? 'https://via.placeholder.com/150', scale: 0.1),
 
           ),
         )),
-        title:  Text("${organizer!.name}'s Dashboard ", style: const TextStyle(fontSize: 18.0)),
+        title:  Text("${organizer?.name}'s Dashboard ", style: const TextStyle(fontSize: 18.0)),
         actions: <Widget>[
           Stack(
             children: [
@@ -165,8 +165,8 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
             label: 'Add Event',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: Icon(Icons.money),
+            label: 'Revenue',
           ),
         ],
         onTap: (index) {

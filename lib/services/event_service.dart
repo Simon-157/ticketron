@@ -7,7 +7,9 @@ class EventService {
 
   Future<void> createEvent(Event event) async {
     try {
-      await _eventsCollection.add(event.toMap());
+      DocumentReference eventDoc = await _eventsCollection.add(event.toMap());
+      String eventId = eventDoc.id;
+      await eventDoc.update({'eventId': eventId});
     } catch (e) {
       print("Error creating event: $e");
       rethrow; 
