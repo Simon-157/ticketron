@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ticketron/models/organizer_model.dart';
+import 'package:ticketron/models/user_model.dart';
+import 'package:ticketron/screens/organizer_screens/organizer_dashboard.dart';
+import 'package:ticketron/services/auth_service.dart';
 import 'dart:async';
 import 'package:ticketron/utils/constants.dart'; 
 
@@ -10,11 +14,37 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  AuthService  _authService = AuthService();
+
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () async {
+      if (_authService.getCurrentUser() != null) {
+        final user = await _authService.getUserData();
+        if (user != null) {
+          Navigator.of(context).pushReplacementNamed('/home');
+          return;
+        }
+        else{
+          await _authService.getOrganizerDetails(_authService.getCurrentUser()!.uid).then(
+            (organizer) =>{
+              if(!organizer.isVerified){
+                Navigator.of(context).pushReplacementNamed('/verify'),
+              }
+              else{
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const OrganizerDashboardScreen();
+                })),
+              }
+            }
+          );
+        }
+      }
+      else{
       Navigator.of(context).pushReplacementNamed('/login');
+
+      }
     });
   }
 

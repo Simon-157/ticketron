@@ -13,14 +13,17 @@ class Event {
   final String location;
   final Price price;
   final String description;
-  final Organizer organizer;
-  final List<AgendaItem> agenda;
+  final Organizer? organizer;
+   List<AgendaItem> agenda;
   final List<String> images;
   final String? videoUrl;
   final int ticketsLeft;
-  final String category;
+  String category;
   final String? locationMapUrl;
-  final int totalCapacityNeeded;
+   int totalCapacityNeeded;
+
+
+  
 
   Event({
     required this.eventId,
@@ -91,7 +94,7 @@ class Event {
       'location': location,
       'price': price.toMap(),
       'description': description,
-      'organizer': organizer.toMap(),
+      'organizer': organizer?.toMap(),
       'agenda': agenda.map((x) => x.toMap()).toList(),
       'images': images,
       'videoUrl': videoUrl,
@@ -173,6 +176,8 @@ class Event {
       locationMapUrl.hashCode ^
       totalCapacityNeeded.hashCode;
   }
+
+
 }
 
 class Price {

@@ -43,7 +43,7 @@ class EventDetailsPage extends StatelessWidget {
                 const SizedBox(height: Constants.paddingMedium),
                 EventDescriptionSection(description: event.description),
                 const SizedBox(height: Constants.paddingMedium),
-                OrganizerSection(organizer: event.organizer),
+                OrganizerSection(organizer: event.organizer!),
                 const SizedBox(height: Constants.paddingMedium),
                 EventAgendaSection(agenda: event.agenda),
                 const SizedBox(height: Constants.paddingMedium),

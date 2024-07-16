@@ -218,13 +218,19 @@ class AuthService {
   }
 
   // Fetch user data from Firestore
-  Future<UserModel> getUserData() async {
+  Future<UserModel?> getUserData() async {
     try {
+      
       DocumentSnapshot snapshot =
           await _firestore.collection('users').doc(getCurrentUser()?.uid).get();
+
+      if (!snapshot.exists) {
+        return null;
+      }
       return UserModel.fromDocument(snapshot);
     } catch (error) {
       print(error.toString());
+      
       throw Exception("Error fetching user data from Firestore");
     }
   }

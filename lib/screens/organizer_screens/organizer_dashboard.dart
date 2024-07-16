@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/models/organizer_model.dart';
 import 'package:ticketron/screens/organizer_screens/attendance_screen.dart';
+import 'package:ticketron/screens/organizer_screens/event_creation_screen.dart';
 import 'package:ticketron/services/auth_service.dart';
 import 'package:ticketron/utils/organizer_data.dart';
 import 'package:ticketron/widgets/organizer_view_widgets/organizer_event_card.dart'; 
@@ -14,9 +15,11 @@ class OrganizerDashboardScreen extends StatefulWidget {
   State<OrganizerDashboardScreen> createState() => _OrganizerDashboardScreenState();
 }
 
-class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> {
+class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> with SingleTickerProviderStateMixin {
   final AuthService _authService = AuthService();
-  late Organizer organizer;
+  Organizer? organizer;
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
@@ -26,6 +29,11 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> {
         organizer = value;
       });
     });
+        _controller = AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 300),
+        );
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut,);
   }
 
   @override
@@ -37,12 +45,20 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> {
         automaticallyImplyLeading: false, 
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: CircleAvatar(
+          child: GestureDetector(
+            onTap: () {
+               final RenderBox overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
+                      final Offset tapPosition = overlay.localToGlobal(Offset.zero);
+                      _showPopupMenu(context, tapPosition);
+            },
+            
+            child: CircleAvatar(
             radius: 10.0,
-            backgroundImage: NetworkImage(organizer.logoUrl, scale: 0.1),
+            backgroundImage: NetworkImage(organizer!.logoUrl, scale: 0.1),
+
           ),
-        ),
-        title:  Text("${organizer.name}'s Dashboard ", style: const TextStyle(fontSize: 18.0)),
+        )),
+        title:  Text("${organizer!.name}'s Dashboard ", style: const TextStyle(fontSize: 18.0)),
         actions: <Widget>[
           Stack(
             children: [
@@ -162,7 +178,8 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> {
               // Navigate to Messages screen
               break;
             case 2:
-              // Navigate to Profile screen
+              // Navigate to Add Event screen
+              Navigator.push(context, MaterialPageRoute(builder: (context) => EventCreationScreen( organizer: organizer) ));
               break;
             case 3:
               Navigator.push(context, MaterialPageRoute(builder: (context) => AttendanceScreen() ));
@@ -202,5 +219,82 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> {
         ],
       ),
     );
+  }
+
+
+  void _showPopupMenu(BuildContext context, Offset tapPosition) {
+    _controller.forward();
+    showMenu<String>(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        tapPosition.dx ,
+        tapPosition.dy + 70,
+        0,
+        0,
+      ),
+      items: <PopupMenuEntry<String>>[
+        PopupMenuItem<String>(
+          value: 'settings',
+          child: FadeTransition(
+            opacity: _animation,
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0, -0.5),
+                end: const Offset(0, 0),
+              ).animate(_animation),
+              child: const ListTile(
+                leading: Icon(Icons.settings),
+                title: Text('Settings'),
+              ),
+            ),
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: 'logout',
+          child: FadeTransition(
+            opacity: _animation,
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0, -0.5),
+                end: const Offset(0, 0),
+              ).animate(_animation),
+              child: const ListTile(
+                leading: Icon(Icons.logout),
+                title: Text('Logout'),
+              ),
+            ),
+          ),
+        ),
+        const PopupMenuItem<String>(
+          value: 'share',
+          child: ListTile(
+            leading: Icon(Icons.share),
+            title: Text('Share'),
+          ),
+        ),
+        const PopupMenuItem<String>(
+          value: 'remove',
+          child: ListTile(
+            leading: Icon(Icons.delete),
+            title: Text('Remove'),
+          ),
+        ),
+      ],
+    ).then((value) {
+      if (value != null) {
+        _controller.reverse();
+        if (value == 'logout') {
+          _authService.signOut(context);
+        }
+
+      }
+    });
+  }
+
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

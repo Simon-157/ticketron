@@ -27,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     );
     _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut,);
   }
+  
   void _showPopupMenu(BuildContext context, Offset tapPosition) {
     _controller.forward();
     showMenu<String>(
