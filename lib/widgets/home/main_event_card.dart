@@ -19,7 +19,7 @@ class EventCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => EventDetailsPage(event: event),
+            builder: (context) => EventDetailsPage(event: event, role: 'user'),
           ),
         );
       },

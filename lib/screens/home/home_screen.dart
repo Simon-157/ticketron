@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     );
     _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut,);
   }
-  
+
   void _showPopupMenu(BuildContext context, Offset tapPosition) {
     _controller.forward();
     showMenu<String>(
@@ -153,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   IconButton(
                     icon: const Icon(Icons.more_vert, color: Color.fromARGB(57, 0, 0, 0)),
                     onPressed: () {
-                      final RenderBox overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
+                      final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
                       final Offset tapPosition = overlay.localToGlobal(Offset.zero);
                       _showPopupMenu(context, tapPosition);
                     },

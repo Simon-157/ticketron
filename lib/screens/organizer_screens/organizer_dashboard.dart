@@ -47,7 +47,7 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
             onTap: () {
-               final RenderBox overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
+               final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
                       final Offset tapPosition = overlay.localToGlobal(Offset.zero);
                       _showPopupMenu(context, tapPosition);
             },

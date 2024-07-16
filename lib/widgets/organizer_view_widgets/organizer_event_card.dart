@@ -2,19 +2,22 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:ticketron/models/event_model.dart';
+import 'package:ticketron/screens/event/event_details_screen.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/helpers.dart';
 
 class OrganizerEventCard extends StatelessWidget {
   final Event event;
 
-  OrganizerEventCard({required this.event});
+  const OrganizerEventCard({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Define your onTap action here
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return EventDetailsPage(event: event, role: 'organizer');
+        }));
       },
       child: Container(
         width: 250,

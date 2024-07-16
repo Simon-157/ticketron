@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/screens/event/get_ticket_screen.dart';
+import 'package:ticketron/screens/organizer_screens/attendance_screen.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/helpers.dart';
 
@@ -10,8 +11,9 @@ import '../../models/organizer_model.dart';
 
 class EventDetailsPage extends StatelessWidget {
   final Event event;
+  final String role;
 
-  EventDetailsPage({required this.event});
+  EventDetailsPage({required this.event, required this.role});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +57,7 @@ class EventDetailsPage extends StatelessWidget {
             bottom: 0,
             left: 0,
             right: 0,
-            child: TicketPurchaseSection(price: event.price, event: event,),
+            child: TicketPurchaseSection(price: event.price, event: event, role: role),
           ),
         ],
       ),
@@ -283,8 +285,9 @@ class EventLocationSection extends StatelessWidget {
 class TicketPurchaseSection extends StatelessWidget {
   final Price price;
   final Event event;
+  final String role;
 
-  TicketPurchaseSection({required this.price, required this.event});
+  TicketPurchaseSection({required this.price, required this.event, required this.role});
 
   @override
   Widget build(BuildContext context) {
@@ -303,7 +306,17 @@ class TicketPurchaseSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
+          role == 'organizer' ?  ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => role == 'organizer' ? AttendanceScreen() : GetTicketScreen(event: event),
+                ),
+              );
+            },
+            child: const Text('Edit Event')
+          ) : Text(
             price.premiumPrice > 0
                 ? '\$${price.premiumPrice.toStringAsFixed(2)} - \$${price.regularPrice.toStringAsFixed(2)}'
                 : 'FREE',
@@ -314,11 +327,11 @@ class TicketPurchaseSection extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => GetTicketScreen(event: event),
+                  builder: (context) => role == 'organizer' ? AttendanceScreen() : GetTicketScreen(event: event),
                 ),
               );
             },
-            child: const Text('Get a Ticket'),
+            child: role == 'organizer' ? const Text('Attendance') : const Text('Get a Ticket'),
           ),
         ],
       ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:ticketron/screens/explore/explore_screen.dart';
-import 'package:ticketron/screens/favorites/favorite_screen.dart';
 import 'package:ticketron/screens/home/home_screen.dart';
 import 'package:ticketron/screens/organizer_screens/organizer_dashboard.dart';
 import 'package:ticketron/screens/profile/profile_screen.dart';

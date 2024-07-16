@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ticketron/models/organizer_model.dart';
-import 'package:ticketron/models/user_model.dart';
 import 'package:ticketron/screens/organizer_screens/organizer_dashboard.dart';
 import 'package:ticketron/services/auth_service.dart';
 import 'dart:async';
