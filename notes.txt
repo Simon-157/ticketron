@@ -1,0 +1,11 @@
+### organizer page
+-- Revenue screen
+-- Revenue Statistics on organizer home screen
+-- Notifications
+-- Message Screen
+
+
+### User page
+-- Ticket logic for events 
+-- API for creating the events
+-- Linking user screen to fetching the data 

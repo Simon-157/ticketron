@@ -5,7 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ticketron/models/event_model.dart'; 
 import 'package:ticketron/models/organizer_model.dart';
 import 'package:ticketron/screens/organizer_screens/event_create_screen_2.dart';
-import 'package:ticketron/services/storage_service.dart'; 
+import 'package:ticketron/services/storage_service.dart';
+import 'package:ticketron/widgets/organizer_view_widgets/organizer_bottom_nav.dart'; 
 
 class EventCreationScreen extends StatefulWidget {
   final Organizer? organizer;
@@ -36,6 +37,7 @@ class _EventCreationScreenState extends State<EventCreationScreen> {
       appBar: AppBar(
         title: const Text('Create Event'),
       ),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Form(
@@ -147,6 +149,8 @@ class _EventCreationScreenState extends State<EventCreationScreen> {
           ),
         ),
       ),
+
+      bottomNavigationBar: OrganizerBottomNav(organizer: widget.organizer, currentIndex: 2),
     );
   }
 

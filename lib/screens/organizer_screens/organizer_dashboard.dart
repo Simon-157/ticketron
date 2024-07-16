@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/models/organizer_model.dart';
-import 'package:ticketron/screens/organizer_screens/attendance_screen.dart';
-import 'package:ticketron/screens/organizer_screens/event_creation_screen.dart';
 import 'package:ticketron/services/auth_service.dart';
 import 'package:ticketron/utils/organizer_data.dart';
+import 'package:ticketron/widgets/organizer_view_widgets/organizer_bottom_nav.dart';
 import 'package:ticketron/widgets/organizer_view_widgets/organizer_event_card.dart'; 
 
 class OrganizerDashboardScreen extends StatefulWidget {
@@ -142,52 +141,45 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
                 ),
               ],
             ),
+            ),
+            const SizedBox(height: 20.0),
+            const Text(
+              'Revenue Streams',
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10.0),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                _buildStatisticCard(
+                  context,
+                  title: 'Present',
+                  count: dummyEvents.where((event) => event.date.isAfter(DateTime.now())).length,
+                ),
+
+                const SizedBox(width: 16.0),
+                _buildStatisticCard(
+                  context,
+                  title: 'Past',
+                  count: dummyEvents.where((event) => event.date.isBefore(DateTime.now())).length,
+                ),
+                 const SizedBox(width: 16.0),
+                _buildStatisticCard(
+                  context,
+                  title: 'Audience',
+                  count: dummyEvents.where((event) => event.date.isBefore(DateTime.now())).length,
+                ),
+              ],
+            ),
             )
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0, 
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event),
-            label: 'Events',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            label: 'Messages',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: 'Add Event',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.money),
-            label: 'Revenue',
-          ),
-        ],
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              // Navigate to Events screen
-              break;
-            case 1:
-              // Navigate to Messages screen
-              break;
-            case 2:
-              // Navigate to Add Event screen
-              Navigator.push(context, MaterialPageRoute(builder: (context) => EventCreationScreen( organizer: organizer) ));
-              break;
-            case 3:
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AttendanceScreen() ));
-              break;
-            default:
-          }
-        },
-      ),
+      bottomNavigationBar: OrganizerBottomNav(organizer: organizer, currentIndex:0)
+      
     );
   }
 
