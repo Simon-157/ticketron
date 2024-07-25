@@ -12,7 +12,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  AuthService  _authService = AuthService();
+  final AuthService _authService = AuthService();
 
   @override
   void initState() {
@@ -23,25 +23,18 @@ class _SplashScreenState extends State<SplashScreen> {
         if (user != null) {
           Navigator.of(context).pushReplacementNamed('/home');
           return;
+        } else {
+          final organizer = await _authService.getOrganizerDetails(_authService.getCurrentUser()!.uid);
+          if (organizer != null && !(organizer.isVerified as bool? ?? false)) {
+            Navigator.of(context).pushReplacementNamed('/verify');
+          } else {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return const OrganizerDashboardScreen();
+            }));
+          }
         }
-        else{
-          await _authService.getOrganizerDetails(_authService.getCurrentUser()!.uid).then(
-            (organizer) =>{
-              if(!organizer.isVerified){
-                Navigator.of(context).pushReplacementNamed('/verify'),
-              }
-              else{
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const OrganizerDashboardScreen();
-                })),
-              }
-            }
-          );
-        }
-      }
-      else{
-      Navigator.of(context).pushReplacementNamed('/login');
-
+      } else {
+        Navigator.of(context).pushReplacementNamed('/login');
       }
     });
   }

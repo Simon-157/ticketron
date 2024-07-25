@@ -4,6 +4,7 @@ import 'package:ticketron/screens/app/splash_screen.dart';
 import 'package:ticketron/screens/auth/login_screen.dart';
 import 'package:ticketron/screens/auth/register_screen.dart';
 import 'package:ticketron/screens/auth/verify_user_screen.dart';
+import 'package:ticketron/screens/event/order_complete.dart';
 import 'package:ticketron/shared/page_navigation.dart';
 import 'package:ticketron/utils/constants.dart';
 
@@ -60,6 +61,7 @@ class TicketronApp extends StatelessWidget {
         '/home': (context) => const PageNavigation(),
         '/event': (context) => const PageNavigation(),
         '/explore': (context) => const PageNavigation(),
+        '/payment/success': (context) => const OrderCompleteScreen(),
       },
     );
   }

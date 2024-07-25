@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/screens/event/order_complete.dart';
+import 'package:ticketron/screens/payment/payment_screen.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/helpers.dart';
 
@@ -287,13 +288,16 @@ class OrderTotalSection extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               // Handle order placement
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) =>  PaymentScreen()));
+              
               //move to order complete screen
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => OrderCompleteScreen(),
-                ),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => OrderCompleteScreen(),
+              //   ),
+              // );
             },
             child: const Text('Place Order'),
           ),

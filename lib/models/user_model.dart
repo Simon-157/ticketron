@@ -65,10 +65,10 @@ class UserModel {
     }
 
     return UserModel(
-      userId: data['userId'] as String,
-      name: data['name'] as String,
-      email: data['email'] as String,
-      avatarUrl: data['avatarUrl'] as String,
+      userId: data['userId'] ?? '',
+      name: data['name'] ?? '',
+      email: data['email'] ?? '',
+      avatarUrl: data['avatarUrl'] ?? '',
     );
   }
 

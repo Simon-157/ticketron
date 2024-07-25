@@ -4,6 +4,8 @@ import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/organizer_data.dart';
 
 class OrderCompleteScreen extends StatelessWidget {
+  const OrderCompleteScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

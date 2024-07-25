@@ -39,10 +39,10 @@ class _EventEditScreenState extends State<EventEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Event'),
+        title: const Text('Edit Event'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -58,7 +58,7 @@ class _EventEditScreenState extends State<EventEditScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               _buildTextField(
                 controller: _descriptionController,
                 labelText: 'Description',
@@ -70,7 +70,7 @@ class _EventEditScreenState extends State<EventEditScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               _buildTextField(
                 controller: _locationController,
                 labelText: 'Location',
@@ -81,7 +81,7 @@ class _EventEditScreenState extends State<EventEditScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               Row(
                 children: <Widget>[
                   Expanded(
@@ -91,7 +91,7 @@ class _EventEditScreenState extends State<EventEditScreen> {
                       labelText: 'Premium Price',
                     ),
                   ),
-                  SizedBox(width: 20.0),
+                  const SizedBox(width: 20.0),
                   Expanded(
                     child: _buildTextField(
                       keyboardType: TextInputType.number,
@@ -101,7 +101,7 @@ class _EventEditScreenState extends State<EventEditScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               _buildTextField(
                 controller: _categoryController,
                 labelText: 'Category',
@@ -112,7 +112,7 @@ class _EventEditScreenState extends State<EventEditScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               _buildTextField(
                 controller: _totalCapacityController,
                 labelText: 'Total Capacity Needed',
@@ -124,7 +124,7 @@ class _EventEditScreenState extends State<EventEditScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -141,12 +141,12 @@ class _EventEditScreenState extends State<EventEditScreen> {
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white, backgroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(vertical: 15.0),
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'Update Event',
                   style: TextStyle(fontSize: 16.0),
                 ),
@@ -175,7 +175,7 @@ class _EventEditScreenState extends State<EventEditScreen> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
-        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+        contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
       ),
     );
   }
@@ -198,15 +198,15 @@ class _EventEditScreenState extends State<EventEditScreen> {
     final snackBar = SnackBar(
       content: Text(
         message,
-        style: TextStyle(fontSize: 16, color: Colors.white),
+        style: const TextStyle(fontSize: 16, color: Colors.white),
       ),
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
       behavior: SnackBarBehavior.floating,
       elevation: 2.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      backgroundColor: Color.fromARGB(255, 96, 201, 101),
+      backgroundColor: const Color.fromARGB(255, 96, 201, 101),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }

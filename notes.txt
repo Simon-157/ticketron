@@ -9,3 +9,4 @@
 -- Ticket logic for events 
 -- API for creating the events
 -- Linking user screen to fetching the data 
+-- Payment Logic and Screen
