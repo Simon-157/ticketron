@@ -3,10 +3,15 @@
 -- Revenue Statistics on organizer home screen
 -- Notifications
 -- Message Screen
+- Live events integration
 
 
 ### User page
 -- Ticket logic for events 
+
+//IN PROGRESS
 -- API for creating the events
+-- Favoriting
 -- Linking user screen to fetching the data 
 -- Payment Logic and Screen
+-- Live events integration

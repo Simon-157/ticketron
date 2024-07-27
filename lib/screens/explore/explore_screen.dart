@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ticketron/models/event_model.dart';
+import 'package:ticketron/services/auth_service.dart';
+import 'package:ticketron/services/events_services.dart';
 import 'package:ticketron/utils/constants.dart';
-import 'package:ticketron/utils/organizer_data.dart';
+import 'package:ticketron/widgets/global/skeleton_loader_widget.dart';
 import 'package:ticketron/widgets/home/suggestion_event_card.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -12,100 +14,75 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
+  late EventService eventService;
+  AuthService authService = AuthService();  
   List<Event> filteredEvents = [];
-  String selectedLocation = 'California';
+  List<Event> allEvents = [];
+  String selectedLocation = 'All';
   String searchQuery = '';
   String selectedCategory = '';
+  bool isLoading = true;
+  String errorMessage = '';
 
   @override
   void initState() {
     super.initState();
-    filteredEvents = dummyEvents;
-    _applyFilters();
+    eventService = EventService();
+    _fetchEvents();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Explore'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.filter_list),
-            onPressed: () {
-              _filterByCategory();
-            },
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SearchBar(
-              selectedLocation: selectedLocation,
-              onSearchChanged: (value) {
-                setState(() {
-                  searchQuery = value;
-                  _applyFilters();
-                });
-              },
-              onLocationChanged: (value) {
-                setState(() {
-                  selectedLocation = value;
-                  _applyFilters();
-                });
-              },
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: ListView.builder(
-                itemCount: filteredEvents.length,
-                itemBuilder: (context, index) {
-                  Event event = filteredEvents[index];
-                  return SuggestionCard(event: event);
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  Future<void> _fetchEvents() async {
+    try {
+      List<Event> events = await eventService.getAllEvents(authService.getCurrentUser()!.uid);
+      setState(() {
+        allEvents = events;
+        filteredEvents = allEvents;
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Error fetching events: $e');
+      setState(() {
+        errorMessage = 'Failed to load events';
+        isLoading = false;
+      });
+    }
   }
 
-  void _applyFilters() {
+  void _applyFilters(String key) {
     setState(() {
-      List<Event> eventsBySearch = dummyEvents
-          .where((event) =>
-              event.title.toLowerCase().contains(searchQuery.toLowerCase()))
-          .toList();
-
-      List<Event> eventsByLocation = dummyEvents
-          .where((event) => event.location
-              .toLowerCase()
-              .contains(selectedLocation.toLowerCase()))
-          .toList();
-
-      List<Event> eventsByCategory =  dummyEvents
-          .where((event) =>
-              selectedCategory.isEmpty ||
-              event.category
-                  .toLowerCase()
-                  .contains(selectedCategory.toLowerCase()))
-          .toList();
-
-      // Combine the filtered lists, considering that each filter is applied independently
-      Set<Event> combinedSet = Set.from(eventsBySearch)
-        ..addAll(eventsByLocation)
-        ..addAll(eventsByCategory);
-
-      filteredEvents = combinedSet.toList();
-
-      // Debug print to check the filtered list
-      print('Filtered Events: ${filteredEvents.map((e) => e.title).toList()}');
+      switch (key) {
+        case 'location':
+          if (selectedLocation == 'All') {
+            filteredEvents = allEvents;
+          }
+          filteredEvents = allEvents
+              .where((event) => event.location.toLowerCase().contains(selectedLocation.toLowerCase()))
+              .toList();
+          break;
+        case 'category':
+          if (selectedCategory == 'All') {
+            filteredEvents = allEvents;
+            break;
+          }
+          filteredEvents = allEvents
+              .where((event) => event.category.toLowerCase().contains(selectedCategory.toLowerCase()))
+              .toList();
+          break;
+        case 'search':
+          if (searchQuery.isEmpty) {
+            filteredEvents = allEvents;
+          }
+          filteredEvents = allEvents
+              .where((event) => event.title.toLowerCase().contains(searchQuery.toLowerCase()))
+              .toList();
+          break;
+        default:
+          filteredEvents = allEvents;
+          break;
+      }
     });
   }
+
 
   void _filterByCategory() {
     List<String> categories = ['All', 'Conference', 'Workshop', 'Meetup'];
@@ -121,7 +98,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               onTap: () {
                 setState(() {
                   selectedCategory = category == 'All' ? '' : category;
-                  _applyFilters();
+                  _applyFilters('category');
                 });
                 Navigator.pop(context);
               },
@@ -129,6 +106,56 @@ class _ExploreScreenState extends State<ExploreScreen> {
           }).toList(),
         );
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Explore'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.filter_list),
+            onPressed: _filterByCategory,
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: isLoading
+            ? SkeletonLoader()
+            : errorMessage.isNotEmpty
+                ? Center(child: Text(errorMessage))
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SearchBar(
+                        selectedLocation: selectedLocation,
+                        onSearchChanged: (value) {
+                          searchQuery = value;
+                          _applyFilters('search');
+                        },
+                        onLocationChanged: (value) {
+                          selectedLocation = value;
+                          _applyFilters('location');
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      Expanded(
+                        child: filteredEvents.isEmpty
+                            ? const Center(child: Text('No events match your search query.'))
+                            : ListView.builder(
+                                itemCount: filteredEvents.length,
+                                itemBuilder: (context, index) {
+                                  Event event = filteredEvents[index];
+                                  return SuggestionCard(event: event);
+                                },
+                              ),
+                      ),
+                    ],
+                  ),
+      ),
     );
   }
 }
@@ -175,12 +202,10 @@ class SearchBar extends StatelessWidget {
             ),
             child: Row(
               children: [
-                // VerticalDivider(color: Colors.grey),
-                Icon(Icons.location_on,
-                    color: Color.fromARGB(255, 250, 251, 252)),
-                SizedBox(width: 8),
+                const Icon(Icons.location_on, color: Colors.white),
+                const SizedBox(width: 8),
                 DropdownButton<String>(
-                  dropdownColor:  Color.fromARGB(255, 162, 163, 163),
+                  dropdownColor: const Color.fromARGB(255, 162, 163, 163),
                   value: selectedLocation,
                   underline: Container(),
                   onChanged: (String? newValue) {
@@ -188,15 +213,13 @@ class SearchBar extends StatelessWidget {
                       onLocationChanged(newValue);
                     }
                   },
-                  items: <String>['California', 'New York', 'Brooklyn']
+                  items: <String>['All','California', 'New York', 'Brooklyn']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
-
                       value: value,
                       child: Text(
                         value,
-                        style:
-                            TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                        style: const TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
                       ),
                     );
                   }).toList(),

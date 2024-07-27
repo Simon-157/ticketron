@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:ticketron/utils/constants.dart';
 
 class FilterToggles extends StatefulWidget {
-  const FilterToggles({super.key});
+  final Function(String) onFilterChanged; // Callback function
+
+  const FilterToggles({super.key, required this.onFilterChanged});
 
   @override
   _FilterTogglesState createState() => _FilterTogglesState();
@@ -11,13 +13,13 @@ class FilterToggles extends StatefulWidget {
 class _FilterTogglesState extends State<FilterToggles> {
   int selectedIndex = 0;
 
-  final List<String> filters = ['My feed', 'Concerts', 'Seminar', 'Theater'];
+  final List<String> filters = ['My Feed', 'Concerts', 'Seminar', 'Theater'];
 
   void _onFilterTap(int index) {
     setState(() {
       selectedIndex = index;
     });
-    // Handle filter change
+    widget.onFilterChanged(filters[index]); // Trigger callback with selected filter
   }
 
   @override

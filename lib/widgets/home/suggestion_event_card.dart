@@ -30,6 +30,17 @@ class SuggestionCard extends StatelessWidget {
                     height: 80,
                     fit: BoxFit.cover,
                   ),
+                   Positioned(
+                    top: 4,
+                    right: 4,
+                    
+                    child: Icon(
+                      Icons.favorite,
+                      color: event.isLiked! ? Colors.red : Colors.white,
+                      size: 16,
+                    ),
+                    
+                    ), 
                   Positioned(
                     left: 4,
                     top: 4,

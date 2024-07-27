@@ -15,12 +15,13 @@ class Event {
    String description;
    Organizer? organizer;
    List<AgendaItem> agenda;
-   List<String> images;
+   List<dynamic> images;
    String? videoUrl;
    int ticketsLeft;
-  String category;
+   String category;
    String? locationMapUrl;
    int totalCapacityNeeded;
+   bool? isLiked;
 
 
   
@@ -41,6 +42,7 @@ class Event {
     required this.category,
     this.locationMapUrl,
     required this.totalCapacityNeeded,
+    this.isLiked,
   });
 
 
@@ -49,41 +51,6 @@ class Event {
     return price.regularPrice == 0;
   }
 
-  Event copyWith({
-    String? eventId,
-    String? title,
-    DateTime? date,
-    String? time,
-    String? location,
-    Price? price,
-    String? description,
-    Organizer? organizer,
-    List<AgendaItem>? agenda,
-    List<String>? images,
-    String? videoUrl,
-    int? ticketsLeft,
-    String? category,
-    String? locationMapUrl,
-    int? totalCapacityNeeded,
-  }) {
-    return Event(
-      eventId: eventId ?? this.eventId,
-      title: title ?? this.title,
-      date: date ?? this.date,
-      time: time ?? this.time,
-      location: location ?? this.location,
-      price: price ?? this.price,
-      description: description ?? this.description,
-      organizer: organizer ?? this.organizer,
-      agenda: agenda ?? this.agenda,
-      images: images ?? this.images,
-      videoUrl: videoUrl ?? this.videoUrl,
-      ticketsLeft: ticketsLeft ?? this.ticketsLeft,
-      category: category ?? this.category,
-      locationMapUrl: locationMapUrl ?? this.locationMapUrl,
-      totalCapacityNeeded: totalCapacityNeeded ?? this.totalCapacityNeeded,
-    );
-  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -102,6 +69,7 @@ class Event {
       'category': category,
       'locationMapUrl': locationMapUrl,
       'totalCapacityNeeded': totalCapacityNeeded,
+      'isLiked': isLiked,
     };
   }
 
@@ -109,20 +77,21 @@ class Event {
     return Event(
       eventId: map['eventId'] as String,
       title: map['title'] as String,
-      date: DateTime.fromMillisecondsSinceEpoch(map['date'] as int),
+      date: DateTime.fromMillisecondsSinceEpoch(int.tryParse(map['date'].toString()) ?? 0),
       time: map['time'] as String,
       location: map['location'] as String,
       price: Price.fromMap(map['price'] as Map<String,dynamic>),
       description: map['description'] as String,
       organizer: Organizer.fromMap(map['organizer'] as Map<String,dynamic>),
-      agenda: List<AgendaItem>.from((map['agenda'] as List<int>).map<AgendaItem>((x) => AgendaItem.fromMap(x as Map<String,dynamic>),),),
-      images: List<String>.from((map['images'] as List<String>),
+      agenda: List<AgendaItem>.from((map['agenda'] as List<dynamic>).map<AgendaItem>((x) => AgendaItem.fromMap(x as Map<String,dynamic>),),),
+      images: List<dynamic>.from((map['images'] as List<dynamic>),
       ),
       videoUrl: map['videoUrl'] != null ? map['videoUrl'] as String : null,
       ticketsLeft: map['ticketsLeft'] as int,
       category: map['category'] as String,
       locationMapUrl: map['locationMapUrl'] != null ? map['locationMapUrl'] as String : null,
-      totalCapacityNeeded: map['totalCapacityNeeded'] as int,
+      totalCapacityNeeded: int.tryParse(map['totalCapacityNeeded'].toString()) ?? 0,
+      isLiked: map['isLiked'] != null ? map['isLiked'] as bool : false,
       
     );
   }

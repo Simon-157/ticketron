@@ -2,13 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ticketron/models/event_model.dart';
+import 'package:ticketron/models/organizer_model.dart';
 import 'package:ticketron/screens/event/get_ticket_screen.dart';
+import 'package:ticketron/screens/event/live_event.dart';
 import 'package:ticketron/screens/organizer_screens/attendance_screen.dart';
 import 'package:ticketron/screens/organizer_screens/edit_event_screen.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/helpers.dart';
 
-import '../../models/organizer_model.dart';
+
 
 class EventDetailsPage extends StatelessWidget {
   final Event event;
@@ -322,6 +324,19 @@ class TicketPurchaseSection extends StatelessWidget {
                 ? '\$${price.premiumPrice.toStringAsFixed(2)} - \$${price.regularPrice.toStringAsFixed(2)}'
                 : 'FREE',
             style: Constants.heading3.copyWith(color: Constants.primaryColor),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => role == 'organizer' ? LiveStreamScreen(event: event, isHost: true) : LiveStreamScreen(event: event, isHost: false),
+                ),
+              );
+            }, 
+            child: 
+            role == 'organizer' ? const Text('Go live') : const Text('Join Live'),
+          
           ),
           ElevatedButton(
             onPressed: () {
