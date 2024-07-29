@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/models/ticket_model.dart';
 import 'package:ticketron/screens/tickets/ticket_detailed_screen.dart';
+import 'package:ticketron/services/auth_service.dart';
+import 'package:ticketron/services/ticket_service.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/helpers.dart';
 import 'package:ticketron/utils/organizer_data.dart';
@@ -9,22 +11,47 @@ import 'package:ticketron/widgets/tickets/tab_bar.dart';
 import 'package:ticketron/widgets/tickets/ticketcard.dart';
 
 class TicketsScreen extends StatefulWidget {
+  const TicketsScreen({Key? key}) : super(key: key);
+
   @override
   _TicketsScreenState createState() => _TicketsScreenState();
 }
 
 class _TicketsScreenState extends State<TicketsScreen> {
   int _selectedIndex = 0;
+  final AuthService _authService = AuthService();
+  final TicketService _ticketService = TicketService();
+  List<Ticket> _tickets = [];
+  List<Ticket> _filteredTickets = [];
 
-  List<Ticket> get filteredTickets {
-    if (_selectedIndex == 0) {
-      return tickets.where((ticket) => ticket.status == "Upcoming").toList();
-    } else {
-      return tickets.where((ticket) => ticket.status == "Past").toList();
-    }
+  @override
+  void initState() {
+    super.initState();
+    _fetchTickets();
   }
 
-  Event getEventForTicket(String eventId) {
+  Future<void> _fetchTickets() async {
+    final userId = _authService.getCurrentUser()!.uid;
+    // final tickets = await _ticketService.listUserTickets(userId);
+    setState(() {
+      _tickets = tickets; //dummyTickets;
+      _filteredTickets = _filterTickets(tickets, _selectedIndex);
+    });
+  }
+
+  List<Ticket> _filterTickets(List<Ticket> tickets, int selectedIndex) {
+    final status = selectedIndex == 0 ? "Upcoming" : "Past";
+    return tickets.where((ticket) => ticket.status == status).toList();
+  }
+
+  void _onTabChanged(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _filteredTickets = _filterTickets(_tickets, _selectedIndex);
+    });
+  }
+
+  Event _getEventForTicket(String eventId) {
     return dummyEvents.firstWhere((event) => event.eventId == eventId);
   }
 
@@ -32,39 +59,38 @@ class _TicketsScreenState extends State<TicketsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tickets'),
+        title: const Text('My Tickets'),
       ),
       body: Column(
         children: [
-          DatePicker(),
+          const DatePicker(),
           CustomTabBar(
-            tabs: ['Upcoming', 'Past ticket'],
+            tabs: const ['Active', 'In-Active'],
             selectedIndex: _selectedIndex,
-            onTap: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
+            onTap: _onTabChanged,
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: filteredTickets.length,
+              itemCount: _filteredTickets.length,
               itemBuilder: (context, index) {
-                Ticket ticket = filteredTickets[index];
-                Event event = getEventForTicket(ticket.eventId);
-
+                final ticket = _filteredTickets[index];
+                final event = _getEventForTicket(ticket.eventId);
                 return GestureDetector(
-                  onTap: () { 
-                    
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => TicketDetailScreen(ticket: ticket)));
-                   },
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TicketDetailScreen(ticket: ticket),
+                      ),
+                    );
+                  },
                   child: TicketCard(
-        
-                  eventTitle: event.title,
-                  time: event.time,
-                  seat: ticket.seat,
-                  ticketType: ticket.ticketType,
-                ));
+                    eventTitle: event.title,
+                    time: event.time,
+                    seat: ticket.seat,
+                    ticketType: ticket.ticketType,
+                  ),
+                );
               },
             ),
           ),
@@ -75,13 +101,14 @@ class _TicketsScreenState extends State<TicketsScreen> {
 }
 
 class DatePicker extends StatefulWidget {
+  const DatePicker({Key? key}) : super(key: key);
+
   @override
   _DatePickerState createState() => _DatePickerState();
 }
 
 class _DatePickerState extends State<DatePicker> {
   int _selectedIndex = 0;
-
   final List<DateTime> _dates = List<DateTime>.generate(
     7,
     (i) => DateTime.now().add(Duration(days: i)),
@@ -144,5 +171,4 @@ class _DatePickerState extends State<DatePicker> {
       ),
     );
   }
-
 }

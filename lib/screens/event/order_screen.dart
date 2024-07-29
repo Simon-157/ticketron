@@ -2,37 +2,51 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ticketron/models/event_model.dart';
-import 'package:ticketron/screens/event/order_complete.dart';
+// import 'package:ticketron/screens/event/order_complete.dart';
 import 'package:ticketron/screens/payment/payment_screen.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/helpers.dart';
 
 class DetailOrderScreen extends StatelessWidget {
   final Event event;
+  final int totalPrice;
+  final String ticketType;
+  final int quantity;
+  final String phone;
+  final String email;
+  final String attendanceId;
 
-  DetailOrderScreen({required this.event});
+  const DetailOrderScreen(
+      {super.key,
+      required this.event,
+      required this.totalPrice,
+      required this.ticketType,
+      required this.quantity,
+      required this.phone,
+      required this.email, required this.attendanceId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detail Order'),
-         centerTitle: true,
+        centerTitle: true,
         actions: [
           IconButton(
             onPressed: () {
               // Logic for sharing the QR code
             },
-            icon:  SvgPicture.asset(
+            icon: SvgPicture.asset(
               CustomIcons.menuVertical,
               height: 24,
             ),
-          ),],
+          ),
+        ],
       ),
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 100), // Adjust padding to ensure space for the fixed footer
+            padding: const EdgeInsets.only(bottom: 100),
             child: Padding(
               padding: const EdgeInsets.all(Constants.paddingLarge),
               child: Column(
@@ -40,9 +54,9 @@ class DetailOrderScreen extends StatelessWidget {
                 children: [
                   EventDetailCard(event: event),
                   const SizedBox(height: Constants.paddingLarge),
-                  OrderSummary(event: event),
+                  OrderSummary(event: event, totalPrice: totalPrice, ticketType: ticketType, quantity: quantity),
                   const SizedBox(height: Constants.paddingLarge),
-                  PaymentMethodSection(),
+                  PaymentMethodSection(email: email, phone: phone,),
                 ],
               ),
             ),
@@ -51,7 +65,7 @@ class DetailOrderScreen extends StatelessWidget {
             bottom: 0,
             left: 0,
             right: 0,
-            child: OrderTotalSection(event: event),
+            child: OrderTotalSection(event: event, totalPrice: totalPrice, ticketType: ticketType, quantity: quantity, attendanceId: attendanceId,),
           ),
         ],
       ),
@@ -62,7 +76,7 @@ class DetailOrderScreen extends StatelessWidget {
 class EventDetailCard extends StatelessWidget {
   final Event event;
 
-  EventDetailCard({required this.event});
+  const EventDetailCard({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +114,8 @@ class EventDetailCard extends StatelessWidget {
                 const SizedBox(height: Constants.paddingSmall),
                 Row(
                   children: [
-                    const Icon(Icons.calendar_today, size: 16, color: Constants.greyColor),
+                    const Icon(Icons.calendar_today,
+                        size: 16, color: Constants.greyColor),
                     const SizedBox(width: Constants.paddingSmall),
                     Text(
                       '${getFormattedDate(event.date)}',
@@ -111,7 +126,8 @@ class EventDetailCard extends StatelessWidget {
                 const SizedBox(height: Constants.paddingSmall),
                 Row(
                   children: [
-                    const Icon(Icons.access_time, size: 16, color: Constants.greyColor),
+                    const Icon(Icons.access_time,
+                        size: 16, color: Constants.greyColor),
                     const SizedBox(width: Constants.paddingSmall),
                     Text(
                       '${event.time}',
@@ -126,19 +142,25 @@ class EventDetailCard extends StatelessWidget {
       ),
     );
   }
-
-
 }
 
 class OrderSummary extends StatelessWidget {
   final Event event;
+  final int totalPrice;
+  final String ticketType;
+  final int quantity;
 
-  OrderSummary({required this.event});
+  const OrderSummary(
+      {super.key,
+      required this.event,
+      required this.totalPrice,
+      required this.ticketType,
+      required this.quantity});
 
   @override
   Widget build(BuildContext context) {
-    double subtotal = event.price.premiumPrice > 0 ? event.price.premiumPrice : event.price.regularPrice;
-    double fees = subtotal * 0.06; // Example fee calculation
+    double subtotal = totalPrice.toDouble();
+    double fees = subtotal * 0.06; // 6% fees
     double total = subtotal + fees;
 
     return Container(
@@ -163,13 +185,15 @@ class OrderSummary extends StatelessWidget {
             style: Constants.heading3,
           ),
           const SizedBox(height: Constants.paddingMedium),
-          _buildSummaryRow('1x Premium price', '\$${subtotal.toStringAsFixed(2)}'),
+          _buildSummaryRow('${quantity}X $ticketType price',
+              '\$${subtotal.toStringAsFixed(2)}'),
           const SizedBox(height: Constants.paddingSmall),
           _buildSummaryRow('Subtotal', '\$${subtotal.toStringAsFixed(2)}'),
           const SizedBox(height: Constants.paddingSmall),
           _buildSummaryRow('Fees', '\$${fees.toStringAsFixed(2)}'),
           const Divider(height: Constants.paddingLarge),
-          _buildSummaryRow('Total', '\$${total.toStringAsFixed(2)}', isTotal: true),
+          _buildSummaryRow('Total', '\$${total.toStringAsFixed(2)}',
+              isTotal: true),
         ],
       ),
     );
@@ -193,6 +217,12 @@ class OrderSummary extends StatelessWidget {
 }
 
 class PaymentMethodSection extends StatelessWidget {
+  final String paymentMethod = 'PayPal';
+  final String email;
+  final String phone;
+
+  const PaymentMethodSection({super.key, required this.email, required this.phone});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -233,18 +263,15 @@ class PaymentMethodSection extends StatelessWidget {
           const SizedBox(height: Constants.paddingMedium),
           Row(
             children: [
-
               SvgPicture.asset(
-               CustomIcons.paypal,
+                CustomIcons.paypal,
                 width: 40,
                 height: 40,
                 color: Colors.blue,
-
               ),
-            
               const SizedBox(width: Constants.paddingMedium),
-              const Text(
-                'PayPal\nmichelle.barkin@mail.com',
+               Text(
+                '$paymentMethod\n$email',
                 style: Constants.bodyText,
               ),
             ],
@@ -257,12 +284,17 @@ class PaymentMethodSection extends StatelessWidget {
 
 class OrderTotalSection extends StatelessWidget {
   final Event event;
+  final int totalPrice;
+  final String ticketType;
+  final int quantity;
+  final String attendanceId;  
 
-  OrderTotalSection({required this.event});
+
+  const OrderTotalSection({super.key, required this.event, required this.totalPrice, required this.ticketType, required this.quantity, required this.attendanceId});
 
   @override
   Widget build(BuildContext context) {
-    double subtotal = event.price.premiumPrice > 0 ? event.price.premiumPrice : event.price.regularPrice;
+    double subtotal = totalPrice.toDouble();
     double fees = subtotal * 0.06; // Example fee calculation
     double total = subtotal + fees;
 
@@ -289,8 +321,8 @@ class OrderTotalSection extends StatelessWidget {
             onPressed: () {
               // Handle order placement
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) =>  PaymentScreen()));
-              
+                  MaterialPageRoute(builder: (context) => PaymentScreen(attendanceId: attendanceId, quantity:quantity, totalPrice:total, ticketType:ticketType)));
+
               //move to order complete screen
               // Navigator.push(
               //   context,

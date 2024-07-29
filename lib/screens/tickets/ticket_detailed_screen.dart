@@ -9,7 +9,7 @@ import 'package:ticketron/utils/organizer_data.dart';
 class TicketDetailScreen extends StatelessWidget {
   final Ticket ticket;
 
-  TicketDetailScreen({required this.ticket});
+  const TicketDetailScreen({super.key, required this.ticket});
 
   Event getEventForTicket(String eventId) {
     return dummyEvents.firstWhere((event) => event.eventId == eventId);
@@ -30,7 +30,7 @@ class TicketDetailScreen extends StatelessWidget {
           children: [
             Expanded(
               child: Container(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.0),
@@ -50,7 +50,7 @@ class TicketDetailScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(15.0),
                         child: CachedNetworkImage(
                           imageUrl: event.images[0],
-                          height: 200,
+                          height: 190,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -155,7 +155,7 @@ class TicketDetailScreen extends StatelessWidget {
                                       CachedNetworkImage(
                                         imageUrl:
                                             'https://barcode.tec-it.com/barcode.ashx?data=${ticket.barcode}',
-                                        height: 80,
+                                        height: 70,
                                         fit: BoxFit.contain,
                                       ),
                                     ],

@@ -9,7 +9,7 @@ import 'package:ticketron/utils/helpers.dart';
 class GetTicketScreen extends StatefulWidget {
   final Event event;
 
-  GetTicketScreen({required this.event});
+  const GetTicketScreen({super.key, required this.event});
 
   @override
   _GetTicketScreenState createState() => _GetTicketScreenState();
@@ -30,17 +30,18 @@ class _GetTicketScreenState extends State<GetTicketScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Get a Ticket'),
-         centerTitle: true,
+        centerTitle: true,
         actions: [
           IconButton(
             onPressed: () {
               // Logic for sharing the QR code
             },
-            icon:  SvgPicture.asset(
+            icon: SvgPicture.asset(
               CustomIcons.menuVertical,
               height: 24,
             ),
-          ),],
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -68,7 +69,12 @@ class _GetTicketScreenState extends State<GetTicketScreen> {
               ),
             ),
           ),
-          TicketPurchaseSection(totalPrice: getTotalPrice(), event: widget.event,),
+          TicketPurchaseSection(
+            totalPrice: getTotalPrice(),
+            event: widget.event,
+            ticketType: _premiumTicketCount > 0 ? 'Premium' : 'Regular',
+            quantity: _premiumTicketCount + _regularTicketCount,
+          ),
         ],
       ),
     );
@@ -76,6 +82,8 @@ class _GetTicketScreenState extends State<GetTicketScreen> {
 }
 
 class DatePicker extends StatefulWidget {
+  const DatePicker({super.key});
+
   @override
   _DatePickerState createState() => _DatePickerState();
 }
@@ -145,7 +153,6 @@ class _DatePickerState extends State<DatePicker> {
       ),
     );
   }
-
 }
 
 class TicketTypeSection extends StatefulWidget {
@@ -153,7 +160,7 @@ class TicketTypeSection extends StatefulWidget {
   final Function(int) onPremiumCountChanged;
   final Function(int) onRegularCountChanged;
 
-  TicketTypeSection({
+  const TicketTypeSection({super.key, 
     required this.event,
     required this.onPremiumCountChanged,
     required this.onRegularCountChanged,
@@ -378,10 +385,11 @@ class _TicketTypeSectionState extends State<TicketTypeSection> {
 
 class TicketPurchaseSection extends StatelessWidget {
   final int totalPrice;
+  final String ticketType; 
+  final int quantity;
   final Event event;
 
-  TicketPurchaseSection({required this.totalPrice, required this.event});
-  
+  const TicketPurchaseSection({super.key, required this.totalPrice, required this.event, required this.ticketType, required this.quantity});
 
   @override
   Widget build(BuildContext context) {
@@ -409,13 +417,18 @@ class TicketPurchaseSection extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ContactInformationScreen(totalPrice: totalPrice, event: event,),
-      ),
-    );
-  },
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ContactInformationScreen(
+                    totalPrice: totalPrice,
+                    event: event,
+                    ticketType: ticketType,
+                    quantity: quantity
+                  ),
+                ),
+              );
+            },
             child: const Text('Continue'),
           ),
         ],

@@ -5,6 +5,8 @@ import 'package:ticketron/widgets/organizer_view_widgets/barcode_scanner_widget.
 import 'package:ticketron/widgets/organizer_view_widgets/qr_code_scanner_widget.dart';
 
 class AttendanceScreen extends StatefulWidget {
+  const AttendanceScreen({super.key});
+
   @override
   _AttendanceScreenState createState() => _AttendanceScreenState();
 }

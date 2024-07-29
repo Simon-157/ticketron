@@ -45,11 +45,11 @@ class OrderCompleteScreen extends StatelessWidget {
                 // Navigate to the ticket view page
                 Navigator.push(context, MaterialPageRoute(builder: (context) => TicketDetailScreen(ticket: tickets[0],)));
               },
-              child: const Text('View ticket'),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
                 textStyle: Constants.buttonText,
               ),
+              child: const Text('View ticket'),
             ),
             const SizedBox(height: Constants.paddingMedium),
             OutlinedButton(
@@ -57,12 +57,12 @@ class OrderCompleteScreen extends StatelessWidget {
                 // Navigate to explore events page
                 Navigator.pushNamed(context, '/explore');
               },
-              child: const Text('Discover more events'),
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
                 textStyle: Constants.buttonText,
                 side: const BorderSide(color: Constants.primaryColor),
               ),
+              child: const Text('Discover more events'),
             ),
           ],
         ),

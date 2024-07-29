@@ -2,16 +2,31 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:ticketron/models/event_model.dart';
+import 'package:ticketron/screens/event/event_details_screen.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/helpers.dart';
 
 class SuggestionCard extends StatelessWidget {
   final Event event;
 
-  SuggestionCard({super.key, required this.event});
+  const SuggestionCard({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EventDetailsPage(event: event, role: 'user'),
+          ),
+        );
+      },
+      child: _buildCard(),
+    );
+  }
+
+  Widget _buildCard() {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -30,22 +45,21 @@ class SuggestionCard extends StatelessWidget {
                     height: 80,
                     fit: BoxFit.cover,
                   ),
-                   Positioned(
+                  Positioned(
                     top: 4,
                     right: 4,
-                    
                     child: Icon(
                       Icons.favorite,
                       color: event.isLiked! ? Colors.red : Colors.white,
                       size: 16,
                     ),
-                    
-                    ), 
+                  ),
                   Positioned(
                     left: 4,
                     top: 4,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 2),
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white,
@@ -119,10 +133,13 @@ class SuggestionCard extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           color: Constants.highlight,
-                          borderRadius: BorderRadius.circular(Constants.borderRadius),
+                          borderRadius:
+                              BorderRadius.circular(Constants.borderRadius),
                         ),
                         child: Text(
-                          event.isFree ? 'FREE' : '\$${event.price.regularPrice}',
+                          event.isFree
+                              ? 'FREE'
+                              : '\$${event.price.regularPrice}',
                           style: const TextStyle(
                             color: Constants.appTextBlue,
                           ),
@@ -138,9 +155,9 @@ class SuggestionCard extends StatelessWidget {
         ),
       ),
     ).animate().fade(duration: 850.ms).slideY(
-            begin: 0.5,
-            duration: 850.ms,
-            curve: Curves.easeInOutCubic,
-          );
+          begin: 0.5,
+          duration: 850.ms,
+          curve: Curves.easeInOutCubic,
+        );
   }
 }
