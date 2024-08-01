@@ -260,7 +260,7 @@ List<Organizer> dummyOrganizers = [
     email: 'wvS6r@example.com',
     logoUrl: 'https://randomuser.me/api/portraits/women/2.jpg',
     category: 'Business & Networking',
-    about: 'Event Organizers Inc. specializes in corporate events and networking opportunities.', verificationCode: 'ersAWED',
+    about: 'Event Organizers Inc. specializes in corporate events and networking opportunities.', verificationCode: 'ersAWED', phoneNumber: '2333445667',
   ),
   Organizer(
     organizerId: 'b6e7cfdb-4985-43cd-9f97-0f3b94a97f3c',
@@ -269,7 +269,7 @@ List<Organizer> dummyOrganizers = [
     isVerified: true,
     logoUrl: 'https://content.jdmagicbox.com/comp/ernakulam/m4/0484px484.x484.140206113128.a9m4/catalogue/we-create-events-panampilly-nagar-ernakulam-event-management-companies-nsobpzm660.jpg',
     category: 'Arts & Culture',
-    about: 'We promote local artists and cultural events, fostering creativity and community engagement.', verificationCode: 'ERTOKJH',
+    about: 'We promote local artists and cultural events, fostering creativity and community engagement.', verificationCode: 'ERTOKJH', phoneNumber: '2334455667',
   ),
 ];
 

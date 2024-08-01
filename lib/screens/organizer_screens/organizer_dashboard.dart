@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/models/organizer_model.dart';
 import 'package:ticketron/services/auth_service.dart';
-import 'package:ticketron/utils/organizer_data.dart';
+import 'package:ticketron/services/events_services.dart';
+// import 'package:ticketron/services/event_service.dart';
 import 'package:ticketron/widgets/organizer_view_widgets/organizer_bottom_nav.dart';
-import 'package:ticketron/widgets/organizer_view_widgets/organizer_event_card.dart'; 
+import 'package:ticketron/widgets/organizer_view_widgets/organizer_event_card.dart';
 
 class OrganizerDashboardScreen extends StatefulWidget {
-
   const OrganizerDashboardScreen({super.key});
 
   @override
@@ -16,7 +16,14 @@ class OrganizerDashboardScreen extends StatefulWidget {
 
 class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> with SingleTickerProviderStateMixin {
   final AuthService _authService = AuthService();
+  final EventService _eventService = EventService();
+  final Map<String, dynamic> _organizerStatistics = {};
+
+
+
   Organizer? organizer;
+  List<Event> events = [];
+  bool isLoading = true;
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -27,12 +34,73 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
       setState(() {
         organizer = value;
       });
+      _fetchEvents();
+      _populateOrganizerStatistics();
     });
-        _controller = AnimationController(
-          vsync: this,
-          duration: const Duration(milliseconds: 300),
-        );
-    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut,);
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+  }
+
+  Future<void> _fetchEvents() async {
+    if (organizer != null) {
+      try {
+        print('Fetching events for organizer: ${organizer!.organizerId}');
+        List<Event> fetchedEvents = await _eventService.getAllEvents(organizer!.organizerId);
+        setState(() {
+          events = fetchedEvents;
+          isLoading = false;
+        });
+
+        print('Fetched events: $events');
+      } catch (e) {
+        print('Failed to loa    cccd events: $e');
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+  //  'totalRevenue': revenue,
+  //         'totalSoldTickets': soldTickets,
+  //         'totalEvents': totalEvents,
+  //         'bestTicketType': bestTicketTypeData['bestTicketType'],
+  //         'bestTicketQuantity': bestTicketTypeData['quantity'],
+
+  Future<void> _populateOrganizerStatistics() async {
+    if (organizer != null) {
+      try {
+        Map<String, dynamic> statistics = await _eventService.getOrganizerStatistics(organizer!.organizerId);
+        setState(() {
+          _organizerStatistics.addAll(statistics);
+        });
+      } catch (e) {
+        print('Failed to load statistics: $e');
+      }
+    }
+  }
+
+  Widget _buildSkeletonLoader() {
+    return Container(
+      height: 200.0,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 3, // Number of skeleton items
+        itemBuilder: (context, index) {
+          return Container(
+            margin: const EdgeInsets.all(8.0),
+            width: 150.0,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -40,50 +108,47 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
     return Scaffold(
       appBar: AppBar(
         elevation: 2.0,
-        // backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false, 
+        automaticallyImplyLeading: false,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
             onTap: () {
-               final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
-                      final Offset tapPosition = overlay.localToGlobal(Offset.zero);
-                      _showPopupMenu(context, tapPosition);
+              final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+              final Offset tapPosition = overlay.localToGlobal(Offset.zero);
+              _showPopupMenu(context, tapPosition);
             },
-            
             child: CircleAvatar(
-            radius: 10.0,
-            backgroundImage: NetworkImage(organizer?.logoUrl ?? 'https://via.placeholder.com/150', scale: 0.1),
-
+              radius: 10.0,
+              backgroundImage: NetworkImage(organizer?.logoUrl ?? 'https://via.placeholder.com/150', scale: 0.1),
+            ),
           ),
-        )),
-        title:  Text("${organizer?.name}'s Dashboard ", style: const TextStyle(fontSize: 18.0)),
+        ),
+        title: Text("${organizer?.name}'s Dashboard", style: const TextStyle(fontSize: 18.0)),
         actions: <Widget>[
           Stack(
             children: [
               IconButton(
-          tooltip: 'Notifications',
-          icon: const Icon(Icons.notifications, color: Colors.blueAccent,),
-          onPressed: () {
-            // notification handling
-          },
+                tooltip: 'Notifications',
+                icon: const Icon(Icons.notifications, color: Colors.blueAccent),
+                onPressed: () {
+                  // notification handling
+                },
               ),
               Positioned(
-          top: 12,
-          right: 17,
-          child: Container(
-            width: 7,
-            height: 7,
-            decoration: const BoxDecoration(
-              color: Colors.red,
-              shape: BoxShape.circle,
-            ),
-          ),
+                top: 12,
+                right: 17,
+                child: Container(
+                  width: 7,
+                  height: 7,
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                ),
               ),
             ],
           ),
         ],
-        
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -92,19 +157,18 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            // SizedBox(height: 20.0), 
             const Text(
               'Current Events',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16.0),
-            Container(
-              height: 200.0, 
+            isLoading ? _buildSkeletonLoader() : Container(
+              height: 200.0,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: dummyEvents.length,
+                itemCount: events.length,
                 itemBuilder: (context, index) {
-                  Event event = dummyEvents[index];
+                  Event event = events[index];
                   return buildEventCard(event);
                 },
               ),
@@ -117,30 +181,29 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
             const SizedBox(height: 16.0),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                _buildStatisticCard(
-                  context,
-                  title: 'Present',
-                  count: dummyEvents.where((event) => event.date.isAfter(DateTime.now())).length,
-                ),
-
-                const SizedBox(width: 16.0),
-                _buildStatisticCard(
-                  context,
-                  title: 'Past',
-                  count: dummyEvents.where((event) => event.date.isBefore(DateTime.now())).length,
-                ),
-                 const SizedBox(width: 16.0),
-                _buildStatisticCard(
-                  context,
-                  title: 'Audience',
-                  count: dummyEvents.where((event) => event.date.isBefore(DateTime.now())).length,
-                ),
-              ],
-            ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  _buildStatisticCard(
+                    context,
+                    title: 'Present',
+                    count: events.where((event) => event.date.isAfter(DateTime.now())).length,
+                  ),
+                  const SizedBox(width: 16.0),
+                  _buildStatisticCard(
+                    context,
+                    title: 'Past',
+                    count: events.where((event) => event.date.isBefore(DateTime.now())).length,
+                  ),
+                  const SizedBox(width: 16.0),
+                  _buildStatisticCard(
+                    context,
+                    title: 'Audience',
+                    count: _organizerStatistics['totalSoldTickets'] ?? 0,
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 20.0),
             const Text(
@@ -150,38 +213,46 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
             const SizedBox(height: 10.0),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                _buildStatisticCard(
-                  context,
-                  title: 'Present',
-                  count: dummyEvents.where((event) => event.date.isAfter(DateTime.now())).length,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  _buildStatisticCard(
+                    context,
+                    title: 'Revenue',
+                    count: _organizerStatistics['totalRevenue'] ?? 0,
+                  ),
+                  // const SizedBox(width: 16.0),
+                  // _buildStatisticCard(
+                  //   context,
+                  //   title: 'Tickets Sold',
+                  //   count: _organizerStatistics['totalSoldTickets'] ?? 0,
+                  // ),
+                  const SizedBox(width: 16.0),
+                  _buildStatisticCard(
+                    context,
+                    title: 'Events',
+                    count: _organizerStatistics['totalEvents'] ?? 0,
+                  ),
+                  const SizedBox(width: 16.0),
+                  _buildStatisticCard(
+                    context,
+                    title: 'Highest ',
+                    count: _organizerStatistics['bestTicketQuantity'] ?? 0,
+                  ),
 
-                const SizedBox(width: 16.0),
-                _buildStatisticCard(
-                  context,
-                  title: 'Past',
-                  count: dummyEvents.where((event) => event.date.isBefore(DateTime.now())).length,
-                ),
-                 const SizedBox(width: 16.0),
-                _buildStatisticCard(
-                  context,
-                  title: 'Audience',
-                  count: dummyEvents.where((event) => event.date.isBefore(DateTime.now())).length,
-                ),
-              ],
+                 
+
+                ],
+              ),
             ),
-            )
           ],
         ),
       ),
-      bottomNavigationBar: OrganizerBottomNav(organizer: organizer, currentIndex:0)
-      
+      bottomNavigationBar: OrganizerBottomNav(organizer: organizer, currentIndex: 0),
     );
   }
+
 
   Widget buildEventCard(Event event) {
     return OrganizerEventCard(event: event);
@@ -282,7 +353,6 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
       }
     });
   }
-
 
   @override
   void dispose() {

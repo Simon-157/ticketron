@@ -50,7 +50,7 @@ class SuggestionCard extends StatelessWidget {
                     right: 4,
                     child: Icon(
                       Icons.favorite,
-                      color: event.isLiked! ? Colors.red : Colors.white,
+                      color: event.isLiked ? Colors.red : Colors.white,
                       size: 16,
                     ),
                   ),

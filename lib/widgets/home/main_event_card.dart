@@ -39,7 +39,7 @@ class _EventCardState extends State<EventCard> {
     try {
       await eventService.toggleFavoriteEvent(authService.getCurrentUser()!.uid, widget.event.eventId);
       setState(() {
-        widget.event.isLiked = !widget.event.isLiked!;
+        widget.event.isLiked = !widget.event.isLiked;
       });
     } catch (e) {
 
@@ -89,7 +89,7 @@ class _EventCardState extends State<EventCard> {
               left: 4,
               child: IconButton(
                 icon: const Icon(Icons.favorite, size: 20,),
-                color: widget.event.isLiked! ?  Colors.red : Colors.white,
+                color: widget.event.isLiked ?  Colors.red : Colors.white,
                 
                 onPressed: () {  
                   _toggleFavorite();

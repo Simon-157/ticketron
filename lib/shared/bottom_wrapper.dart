@@ -24,9 +24,7 @@ class _BottomNavWrapperState extends State<BottomNavWrapper> {
      const ExploreScreen(),
      const UserFavoritesScreen(),
      TicketsScreen(),
-     const ProfileScreen(),
-    
-    
+     UserProfileScreen(), 
   ];
 
   @override

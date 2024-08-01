@@ -7,6 +7,7 @@ class UserModel {
   final String name;
   final String email;
   final String avatarUrl;
+  String? bio;
 
   UserModel({
     required this.userId,
@@ -19,7 +20,7 @@ class UserModel {
     String? userId,
     String? name,
     String? email,
-    String? avatarUrl,
+    String? avatarUrl, required String bio,
   }) {
     return UserModel(
       userId: userId ?? this.userId,

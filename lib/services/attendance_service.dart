@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:ticketron/models/attendance_model.dart';
 
 class EventAttendanceService {
-  final String baseUrl = 'https://api-ticketron-jvmw.onrender.com';
+  final String baseUrl = 'https://api-ticketron-jvmw.onrender.com/api';
 
   EventAttendanceService();
 
@@ -62,7 +62,10 @@ class EventAttendanceService {
 
     if (response.statusCode == 200) {
       return List<Map<String, dynamic>>.from(json.decode(response.body));
+    } else if (response.statusCode == 404) {
+      return []; // Return an empty list as a positive indication
     } else {
+      print(response.body);
       throw Exception('Failed to fetch attendance list for event');
     }
   }

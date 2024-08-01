@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:ticketron/models/organizer_model.dart';
-import 'package:ticketron/screens/organizer_screens/attendance_screen.dart';
 import 'package:ticketron/screens/organizer_screens/event_creation_screen.dart';
 import 'package:ticketron/screens/organizer_screens/organizer_dashboard.dart';
 
@@ -55,7 +54,7 @@ class OrganizerBottomNav extends StatelessWidget {
               Navigator.push(context, MaterialPageRoute(builder: (context) => EventCreationScreen( organizer: organizer) ));
               break;
             case 3:
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AttendanceScreen() ));
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => AttendanceScreen() ));
               break;
             default:
           }

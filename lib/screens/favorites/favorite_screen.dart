@@ -44,6 +44,14 @@ class _UserFavoritesScreenState extends State<UserFavoritesScreen> {
     }
   }
 
+  Future<void> _refreshFavoriteEvents() async {
+    setState(() {
+      isLoading = true;
+      errorMessage = '';
+    });
+    await _fetchFavoriteEvents();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,16 +70,19 @@ class _UserFavoritesScreenState extends State<UserFavoritesScreen> {
                   ? Center(child: Text(errorMessage))
                   : favoriteEvents.isEmpty
                       ? const Center(child: Text('You have no favorites'))
-                      : ListView.separated(
-                          scrollDirection: Axis.vertical,
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          itemCount: favoriteEvents.length,
-                          separatorBuilder: (context, index) =>
-                              SizedBox(height: 15),
-                          itemBuilder: (context, index) {
-                            final event = favoriteEvents[index];
-                            return EventCard(event: event);
-                          },
+                      : RefreshIndicator(
+                          onRefresh: _refreshFavoriteEvents,
+                          child: ListView.separated(
+                            scrollDirection: Axis.vertical,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            itemCount: favoriteEvents.length,
+                            separatorBuilder: (context, index) =>
+                                SizedBox(height: 15),
+                            itemBuilder: (context, index) {
+                              final event = favoriteEvents[index];
+                              return EventCard(event: event);
+                            },
+                          ),
                         ),
         ),
       ),

@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ticketron/widgets/event_details/event_location_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/models/organizer_model.dart';
 import 'package:ticketron/screens/event/get_ticket_screen.dart';
 import 'package:ticketron/screens/event/live_event.dart';
-import 'package:ticketron/screens/organizer_screens/attendance_screen.dart';
 import 'package:ticketron/screens/organizer_screens/edit_event_screen.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/helpers.dart';
@@ -52,7 +53,7 @@ class EventDetailsPage extends StatelessWidget {
                 const SizedBox(height: Constants.paddingMedium),
                 EventAgendaSection(agenda: event.agenda),
                 const SizedBox(height: Constants.paddingMedium),
-                EventLocationSection(location: event.location),
+                EventLocationSection(location: event.location, latitude:5.7603 , longitude: 0.2199, ),
               ],
             ),
           ),
@@ -89,10 +90,11 @@ class EventImageSection extends StatelessWidget {
   }
 }
 
+
 class EventInfoSection extends StatelessWidget {
   final Event event;
 
-  EventInfoSection({required this.event});
+  const EventInfoSection({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -105,41 +107,35 @@ class EventInfoSection extends StatelessWidget {
         ),
         const SizedBox(height: Constants.paddingSmall),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Icon(Icons.calendar_today, size: 16, color: Constants.greyColor),
-            const SizedBox(width: Constants.paddingSmall),
-            Text(
-              '${event.date.day} ${getMonthName(event.date.month)} ${event.date.year}',
-              style: Constants.bodyText,
-            ),
-          ],
-        ),
-        const SizedBox(height: Constants.paddingSmall),
-        Row(
-          children: [
-            const Icon(Icons.access_time, size: 16, color: Constants.greyColor),
-            const SizedBox(width: Constants.paddingSmall),
-            Text(
-              event.time,
-              style: Constants.bodyText,
-            ),
-          ],
-        ),
-        const SizedBox(height: Constants.paddingSmall),
-        Row(
-          children: [
-            const Icon(Icons.location_on, size: 16, color: Constants.greyColor),
-            const SizedBox(width: Constants.paddingSmall),
-            Text(
-              event.location,
-              style: Constants.bodyText,
-            ),
-          ],
-        ),
+          Row(
+            children: [
+              const SizedBox(width: Constants.paddingSmall),
+              const Icon(Icons.calendar_today,
+                  size: 16, color: Constants.greyColor),
+              const SizedBox(width: Constants.paddingSmall),
+              Text(
+                '${event.date.day} ${getMonthName(event.date.month)} ${event.date.year}',
+                style: Constants.bodyText,
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Icon(Icons.access_time,
+                  size: 16, color: Constants.greyColor),
+              const SizedBox(width: Constants.paddingSmall),
+              Text(
+                event.time,
+                style: Constants.bodyText,
+              ),
+            ],
+          ),
+        ])
       ],
     );
   }
-
 }
 
 class EventDescriptionSection extends StatelessWidget {
@@ -166,10 +162,35 @@ class EventDescriptionSection extends StatelessWidget {
   }
 }
 
+
 class OrganizerSection extends StatelessWidget {
   final Organizer organizer;
 
   OrganizerSection({required this.organizer});
+
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    if (await canLaunch(launchUri.toString())) {
+      await launch(launchUri.toString());
+    } else {
+      throw 'Could not launch $phoneNumber';
+    }
+  }
+
+  Future<void> _sendSMS(String phoneNumber) async {
+    final Uri smsUri = Uri(
+      scheme: 'sms',
+      path: phoneNumber,
+    );
+    if (await canLaunch(smsUri.toString())) {
+      await launch(smsUri.toString());
+    } else {
+      throw 'Could not send SMS to $phoneNumber';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -186,18 +207,36 @@ class OrganizerSection extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              organizer.name,
-              style: Constants.heading3,
+            Row(
+              children: [
+                Text(
+                  organizer.name,
+                  style: Constants.heading3,
+                ),
+                if (organizer.isVerified)
+                  const Padding(
+                    padding: EdgeInsets.only(left: 4.0),
+                    child: Icon(
+                      Icons.verified,
+                      color: Colors.blue,
+                      size: 16.0,
+                    ),
+                  ),
+              ],
             ),
             const SizedBox(height: Constants.paddingSmall),
-            if (organizer.isVerified)
-              const Text(
-                'Verified',
-                style: TextStyle(
-                  color: Colors.blue,
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.call, color: Colors.green),
+                  onPressed: () => _makePhoneCall(organizer.phoneNumber),
                 ),
-              ),
+                IconButton(
+                  icon: const Icon(Icons.sms, color: Colors.blue),
+                  onPressed: () => _sendSMS(organizer.phoneNumber),
+                ),
+              ],
+            ),
           ],
         ),
       ],
@@ -252,37 +291,6 @@ class AgendaCard extends StatelessWidget {
   }
 }
 
-class EventLocationSection extends StatelessWidget {
-  final String location;
-
-  const EventLocationSection({super.key, required this.location});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Location',
-          style: Constants.heading3,
-        ),
-        const SizedBox(height: Constants.paddingSmall),
-        Text(
-          location,
-          style: Constants.bodyText,
-        ),
-        const SizedBox(height: Constants.paddingSmall),
-        // Add a placeholder for map or any other widget you want
-        Container(
-          height: 200,
-          color: Colors.grey[200],
-          child: const Center(child: Text('Map Placeholder')),
-        ),
-      ],
-    );
-  }
-}
-
 
 
 class TicketPurchaseSection extends StatelessWidget {
@@ -330,12 +338,11 @@ class TicketPurchaseSection extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => role == 'organizer' ? LiveStreamScreen(event: event, isHost: true) : LiveStreamScreen(event: event, isHost: false),
+                  builder: (context) => LiveStreamScreen(event: event, isHost: false),
                 ),
               );
             }, 
-            child: 
-            role == 'organizer' ? const Text('Go live') : const Text('Join Live'),
+            child: const Text('Join Live'),
           
           ),
           ElevatedButton(
@@ -343,11 +350,11 @@ class TicketPurchaseSection extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => role == 'organizer' ? AttendanceScreen() : GetTicketScreen(event: event),
+                  builder: (context) =>  GetTicketScreen(event: event),
                 ),
               );
             },
-            child: role == 'organizer' ? const Text('Attendance') : const Text('Get a Ticket'),
+            child:  const Text('Get a Ticket'),
           ),
         ],
       ),

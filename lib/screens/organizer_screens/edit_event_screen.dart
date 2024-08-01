@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ticketron/models/event_model.dart';
-import 'package:ticketron/services/event_service.dart'; // Import your event service
+import 'package:ticketron/services/event_service.dart'; 
 
 class EventEditScreen extends StatefulWidget {
   final Event event;

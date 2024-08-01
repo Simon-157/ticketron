@@ -5,12 +5,14 @@ import 'package:ticketron/screens/auth/login_screen.dart';
 import 'package:ticketron/screens/auth/register_screen.dart';
 import 'package:ticketron/screens/auth/verify_user_screen.dart';
 import 'package:ticketron/screens/event/order_complete.dart';
+import 'package:ticketron/services/notification_service.dart';
 import 'package:ticketron/shared/page_navigation.dart';
 import 'package:ticketron/utils/constants.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await NotificationService().init();
   runApp(const TicketronApp());
 }
 

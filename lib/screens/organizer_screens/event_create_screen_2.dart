@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ticketron/models/event_model.dart';
-import 'package:ticketron/services/event_service.dart'; // Assuming Event and AgendaItem models are defined here
+import 'package:ticketron/services/event_service.dart'; 
 
 class EventCategoryScreen extends StatefulWidget {
   final Event event;

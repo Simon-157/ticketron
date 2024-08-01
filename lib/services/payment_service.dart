@@ -66,7 +66,7 @@ class PaymentService {
 
 class TicketPaymentService extends PaymentService {
 
-  final String baseUrl = 'https://api-ticketron-jvmw.onrender.com';
+  final String baseUrl = 'https://api-ticketron-jvmw.onrender.com/api';
 
   TicketPaymentService({required super.publicKey, required super.encryptionKey, required super.currency, required super.redirectUrl});
 

@@ -12,9 +12,10 @@ class Organizer {
   final String category;
   final String about;
   final String? verificationCode;
+  final String phoneNumber;
 
   Organizer(
-
+    
     { required this.organizerId,
     required this.email,
     required this.name,
@@ -22,7 +23,7 @@ class Organizer {
     required this.logoUrl,
     required this.category,
     required this.about,
-    required this.verificationCode}
+    required this.verificationCode, required this.phoneNumber}
   );
 
 
@@ -36,18 +37,21 @@ class Organizer {
       'category': category,
       'about': about,
       'verificationCode': verificationCode,
+      'phoneNumber': phoneNumber
     };
   }
 
   factory Organizer.fromMap(Map<String, dynamic> map) {
     return Organizer(
-      organizerId: map['organizerId'] as String,
-      name: map['name'] as String,
+      organizerId: map['organizerId'] ??  '',
+      name: map['name'] ?? ' ',
       isVerified: map['isVerified'] as bool,
-      logoUrl: map['logoUrl'] as String,
-      category: map['category'] as String,
-      about: map['about'] as String,
-      verificationCode: map['verificationCode'] as String?, email: map['email'] as String,
+      logoUrl: map['logoUrl'] ?? ' ',
+      category: map['category'] ?? ' ',
+      about: map['about'] ?? ' ',
+      verificationCode: map['verificationCode'] ?? ' ',
+      email: map['email'] ?? ' ',
+      phoneNumber: map['phoneNumber'] ?? '233000000000',
     );
   }
 

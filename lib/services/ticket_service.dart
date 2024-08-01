@@ -4,12 +4,12 @@ import 'package:ticketron/models/ticket_model.dart';
 
 
 class TicketService {
-  final String baseUrl = 'https://api-ticketron-jvmw.onrender.com';
+  final String baseUrl = 'https://api-ticketron-jvmw.onrender.com/api';
 
   TicketService();
 
   Future<void> updateTicketStatus(String ticketId, String status) async {
-    final url = '$baseUrl/api/tickets/$ticketId/status';
+    final url = '$baseUrl/tickets/$ticketId/status';
     final response = await http.put(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
@@ -20,7 +20,7 @@ class TicketService {
   }
 
   Future<String> buyTicket(Ticket ticket) async {
-    final url = '$baseUrl/api/tickets/buy';
+    final url = '$baseUrl/tickets/buy';
     final response = await http.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
@@ -32,7 +32,7 @@ class TicketService {
   }
 
   Future<Ticket> getTicketDetails(String ticketId) async {
-    final url = '$baseUrl/api/tickets/$ticketId';
+    final url = '$baseUrl/tickets/$ticketId';
     final response = await http.get(Uri.parse(url));
 
     final data = _handleResponse(response);
@@ -40,14 +40,14 @@ class TicketService {
   }
 
   Future<void> cancelTicket(String ticketId) async {
-    final url = '$baseUrl/api/tickets/$ticketId';
+    final url = '$baseUrl/tickets/$ticketId';
     final response = await http.delete(Uri.parse(url));
 
     _handleResponse(response);
   }
 
   Future<List<Ticket>> listUserTickets(String userId) async {
-    final url = '$baseUrl/api/users/$userId/tickets';
+    final url = '$baseUrl/users/$userId/tickets';
     final response = await http.get(Uri.parse(url));
 
     final data = _handleResponse(response);

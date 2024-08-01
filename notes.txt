@@ -15,3 +15,21 @@
 -- Linking user screen to fetching the data 
 -- Payment Logic and Screen
 -- Live events integration
+
+
+
+### Local resources
+- qrcode scanner
+- push Notifications
+- image gallery
+- social share
+- 
+
+
+
+#TODAY
+- Attendance record
+- Revenue Statistics
+- Possible live events
+
+dev.jnrgh@gmail.com - Simon5427+
