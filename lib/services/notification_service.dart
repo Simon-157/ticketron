@@ -9,12 +9,33 @@ class NotificationService {
   final AuthService _authService = AuthService();
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  
 
   Future<void> init() async {
     // Initialize local notifications
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
-    final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+    final InitializationSettings initializationSettings = const InitializationSettings(android: initializationSettingsAndroid);
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings, );
+
+     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+    if (notification != null && android != null) {
+      _flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'your_channel_id',
+            'your_channel_name',
+            icon: 'ic_notification',
+          ),
+        ),
+      );
+    }
+  });
+  
 
     // Request notification permissions
     await _firebaseMessaging.requestPermission(

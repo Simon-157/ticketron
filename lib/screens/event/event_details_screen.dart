@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/models/organizer_model.dart';
 import 'package:ticketron/screens/event/get_ticket_screen.dart';
-import 'package:ticketron/screens/event/live_event.dart';
 import 'package:ticketron/screens/organizer_screens/edit_event_screen.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/helpers.dart';
@@ -333,18 +332,18 @@ class TicketPurchaseSection extends StatelessWidget {
                 : 'FREE',
             style: Constants.heading3.copyWith(color: Constants.primaryColor),
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LiveStreamScreen(event: event, isHost: false),
-                ),
-              );
-            }, 
-            child: const Text('Join Live'),
+          // ElevatedButton(
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => LiveStreamScreen(event: event, isHost: false),
+          //       ),
+          //     );
+          //   }, 
+          //   child: const Text('Join Live'),
           
-          ),
+          // ),
           ElevatedButton(
             onPressed: () {
               Navigator.push(

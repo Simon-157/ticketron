@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ticketron/models/attendance_model.dart';
 import 'package:ticketron/models/user_model.dart';
 import 'package:ticketron/services/attendance_service.dart';
+import 'package:ticketron/services/ticket_service.dart';
+import 'package:ticketron/services/user_service.dart';
 import 'package:ticketron/widgets/organizer_view_widgets/barcode_scanner_widget.dart';
 import 'package:ticketron/widgets/organizer_view_widgets/qr_code_scanner_widget.dart';
 
@@ -15,11 +17,15 @@ class AttendanceScreen extends StatefulWidget {
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
   List<UserModel> users = [];
+  
   bool isLoading = true;
   bool hasError = false;
   String searchQuery = '';
   AttendanceStatus? selectedAttendanceStatus;
+  UserService _userService = UserService();
   PaymentStatus? selectedPaymentStatus;
+  final TicketService _ticketService = TicketService();
+   final service = EventAttendanceService();
 
   @override
   void initState() {
@@ -28,9 +34,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   }
 
   Future<void> fetchAttendanceData() async {
-    final service = EventAttendanceService();
+   
     try {
       List<Map<String, dynamic>> attendanceList = await service.getAttendanceListForEvent(widget.eventId);
+      
       // Filter the data
       var filteredList = attendanceList.where((data) {
         final user = UserModel.fromMap(data);
@@ -53,18 +60,45 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     }
   }
 
-  void handleBarcodeDetected(String code) {
+  void handleBarcodeDetected(String code) async {
     print('Barcode detected: $code');
-    // Handle barcode detection logic here
+    try {
+      final ticket = await _ticketService.verifyTicketByBarcode(code);
+      final user = await _userService.getUser(ticket.userId);
+      _showMessageModal('Ticket Verified', 'Ticket ID: ${ticket.barcode}\nUser: ${user?.name}');
+    } catch (error) {
+      _showMessageModal('Verification Failed', 'The barcode could not be verified.');
+    }
   }
 
   Future<bool> handleQRCodeDetected(String code) async {
     print('QR code detected: $code');
-    // Handle QR code detection logic here
+    try {
+      final ticket = await _ticketService.verifyTicket(code);
+       service.updateAttendanceByUserIdAndEventId(ticket.eventId, ticket.userId);
+      _showMessageModal('Ticket Verified', 'Ticket ID: ${ticket.qrcode}\nUser: username');
+      return true;
+    } catch (error) {
+      print(error);
+      _showMessageModal('Verification Failed', 'The QR code could not be verified.');
+      return false;
+    }
+  }
 
-    await Future.delayed(const Duration(seconds: 2)); // Simulate API call or processing time
-
-    return true;
+  void _showMessageModal(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -108,90 +142,89 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
   }
 
-Widget _buildSearchAndFilterControls() {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(
-          height: 40.0,
-          child: TextField(
-            decoration: const InputDecoration(
-              labelText: 'Search by Name',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.search),
+  Widget _buildSearchAndFilterControls() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            height: 40.0,
+            child: TextField(
+              decoration: const InputDecoration(
+                labelText: 'Search by Name',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.search),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                  fetchAttendanceData();
+                });
+              },
+              style: const TextStyle(fontSize: 14.0),
             ),
-            onChanged: (value) {
-              setState(() {
-                searchQuery = value;
-                fetchAttendanceData();
-              });
-            },
-            style: const TextStyle(fontSize: 14.0),
           ),
-        ),
-        const SizedBox(height: 10.0),
-        Row(
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Container(
-                width: double.infinity,
-                child: DropdownButtonFormField<AttendanceStatus>(
-                  value: selectedAttendanceStatus,
-                  items: AttendanceStatus.values.map((status) {
-                    return DropdownMenuItem<AttendanceStatus>(
-                      value: status,
-                      child: Text(status.toString().split('.').last),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedAttendanceStatus = value;
-                      fetchAttendanceData();
-                    });
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Attendance Status',
-                    border: OutlineInputBorder(),
+          const SizedBox(height: 10.0),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Container(
+                  width: double.infinity,
+                  child: DropdownButtonFormField<AttendanceStatus>(
+                    value: selectedAttendanceStatus,
+                    items: AttendanceStatus.values.map((status) {
+                      return DropdownMenuItem<AttendanceStatus>(
+                        value: status,
+                        child: Text(status.toString().split('.').last),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedAttendanceStatus = value;
+                        fetchAttendanceData();
+                      });
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'Attend Status',
+                      border: OutlineInputBorder(),
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 5.0),
-            Expanded(
-              flex: 1,
-              child: Container(
-                width: double.infinity,
-                child: DropdownButtonFormField<PaymentStatus>(
-                  value: selectedPaymentStatus,
-                  items: PaymentStatus.values.map((status) {
-                    return DropdownMenuItem<PaymentStatus>(
-                      value: status,
-                      child: Text(status.toString().split('.').last),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedPaymentStatus = value;
-                      fetchAttendanceData();
-                    });
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Payment Status',
-                    border: OutlineInputBorder(),
+              const SizedBox(width: 5.0),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  // width: double.infinity,
+                  child: DropdownButtonFormField<PaymentStatus>(
+                    value: selectedPaymentStatus,
+                    items: PaymentStatus.values.map((status) {
+                      return DropdownMenuItem<PaymentStatus>(
+                        value: status,
+                        child: Text(status.toString().split('.').last),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedPaymentStatus = value;
+                        fetchAttendanceData();
+                      });
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'Pay Status',
+                      border: OutlineInputBorder(),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
-
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildActionButtons() {
     return Padding(
@@ -224,10 +257,11 @@ Widget _buildSearchAndFilterControls() {
                   ),
                 ),
               ).then((continueScanning) {
+                print(continueScanning);
                 if (continueScanning == false) {
                   setState(() {}); // Refresh UI after scanning completes
                 }
-              });
+              }).catchError((err){print(err);});
             },
             label: 'Scan QR Code',
           ),
@@ -275,20 +309,36 @@ Widget _buildSearchAndFilterControls() {
         separatorBuilder: (context, index) => Divider(height: 0.0, color: Colors.grey[300]),
         itemBuilder: (context, index) {
           return ListTile(
-            contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             leading: CircleAvatar(
               radius: 24.0,
               backgroundImage: NetworkImage(users[index].avatarUrl),
             ),
-            title: Text(
-              users[index].name,
-              style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            title: Text(users[index].name, style: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
+            subtitle: Text(users[index].email, style: const TextStyle(fontSize: 12.0, color: Colors.grey)),
+            trailing: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Text(
+                //   AttendanceStatus.values[users[index].attendanceStatus].toString().split('.').last,
+                //   style: TextStyle(
+                //     fontSize: 12.0,
+                //     fontWeight: FontWeight.bold,
+                //     color: AttendanceStatus.values[users[index].attendanceStatus] == AttendanceStatus.present ? Colors.green : Colors.red,
+                //   ),
+                // ),
+                // const SizedBox(height: 4.0),
+                // Text(
+                //   PaymentStatus.values[users[index].paymentStatus].toString().split('.').last,
+                //   style: TextStyle(
+                //     fontSize: 12.0,
+                //     fontWeight: FontWeight.bold,
+                //     color: PaymentStatus.values[users[index].paymentStatus] == PaymentStatus.paid ? Colors.green : Colors.red,
+                //   ),
+                // ),
+              ],
             ),
-            subtitle: Text(
-              users[index].email,
-              style: const TextStyle(fontSize: 14.0),
-            ),
-            trailing: const Icon(Icons.check_circle, color: Colors.green),
           );
         },
       ),

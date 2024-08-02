@@ -68,19 +68,18 @@ class Ticket {
       'qrcode': qrcode,
     };
   }
-
   factory Ticket.fromMap(Map<String, dynamic> map) {
     return Ticket(
-      ticketId: map['ticketId'] as String,
-      eventId: map['eventId'] as String,
-      userId: map['userId'] as String,
-      seat: map['seat'] as String,
-      ticketType: map['ticketType'] as String,
-      quantity: map['quantity'] as int,
-      totalPrice: map['totalPrice'] as double,
-      status: map['status'] as String,
-      barcode: map['barcode'] as String,
-      qrcode: map['qrcode'] as String,
+      ticketId: map['ticketId'] ?? '',
+      eventId: map['eventId'] ?? ' ',
+      userId: map['userId'] ?? ' ',
+      seat: map['seat'] ?? ' ',
+      ticketType: map['ticketType'] ?? ' ',
+      quantity: map['quantity'] ?? 1,
+      totalPrice: map['totalPrice'] is int ? (map['totalPrice'] as int).toDouble() : map['totalPrice'] ?? 0.0,
+      status: map['status'] ?? ' ',
+      barcode: map['barcode'] ?? ' ',
+      qrcode: map['qrcode'] ?? ' ',
     );
   }
 

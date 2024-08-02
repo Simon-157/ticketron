@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ticketron/models/attendance_model.dart';
@@ -8,6 +6,9 @@ import 'package:ticketron/screens/event/order_screen.dart';
 import 'package:ticketron/services/attendance_service.dart';
 import 'package:ticketron/services/auth_service.dart';
 import 'package:ticketron/utils/constants.dart';
+import 'package:uuid/uuid.dart';
+
+
 
 class ContactInformationScreen extends StatefulWidget {
   final int totalPrice;
@@ -42,7 +43,7 @@ class _ContactInformationScreenState extends State<ContactInformationScreen> {
     setState(() {
       _fullName = userData?.name ?? '';
       _email = userData?.email ?? '';
-      _userId = userData?.userId ?? '';
+      _userId = _authService.getCurrentUser()!.uid;
     });
   }
 
@@ -224,11 +225,11 @@ class _ContactInformationScreenState extends State<ContactInformationScreen> {
     );
   }
 
+
   String _generateRandomId() {
-    const idLength = 8;
-    final random = Random();
-    final id = List<int>.generate(idLength, (_) => random.nextInt(36)).map((i) => '0123456789ABCDEFHJKMNPRTVWXYZ'[i]).join();
-    return id.replaceAllMapped(RegExp(r".{4}"), (match) => "${match.group(0)}-");
+    var uuid = Uuid();
+    return uuid.v4();
+
   }
 
   Future<void> _submitForm() async {

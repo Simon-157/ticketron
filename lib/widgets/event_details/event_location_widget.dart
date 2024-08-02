@@ -64,7 +64,7 @@ class _EventLocationSectionState extends State<EventLocationSection> {
     setState(() {
       polylines.add(
         Polyline(
-          polylineId: PolylineId('polyline'),
+          polylineId: const PolylineId('polyline'),
           color: Colors.blue,
           points: polylineCoordinates,
         ),
@@ -77,7 +77,7 @@ class _EventLocationSectionState extends State<EventLocationSection> {
       context: context,
       builder: (context) {
         return Container(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +87,7 @@ class _EventLocationSectionState extends State<EventLocationSection> {
                 style: Constants.heading3,
               ),
               const SizedBox(height: Constants.paddingSmall),
-              Text(
+              const Text(
                 'From: Your Location',
                 style: Constants.bodyText,
               ),
@@ -127,6 +127,7 @@ class _EventLocationSectionState extends State<EventLocationSection> {
         ),
         const SizedBox(height: Constants.paddingSmall),
         Container(
+          margin: const EdgeInsets.only(bottom: 150.0),
           height: 200,
           color: Colors.grey[200],
           child: GoogleMap(
@@ -139,7 +140,7 @@ class _EventLocationSectionState extends State<EventLocationSection> {
             ),
             markers: {
               Marker(
-                markerId: MarkerId('eventLocation'),
+                markerId: const MarkerId('eventLocation'),
                 position: LatLng(widget.latitude, widget.longitude),
                 infoWindow: InfoWindow(
                   title: widget.location,

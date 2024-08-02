@@ -41,10 +41,10 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      userId: map['userId'] as String,
-      name: map['name'] as String,
-      email: map['email'] as String,
-      avatarUrl: map['avatarUrl'] as String,
+      userId: map['userId'] ?? '',
+      name: map['name'] ?? '',
+      email: map['email'] ?? '',
+      avatarUrl: map['avatarUrl'] ?? '',
     );
   }
 

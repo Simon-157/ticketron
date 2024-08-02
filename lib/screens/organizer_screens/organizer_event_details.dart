@@ -8,6 +8,7 @@ import 'package:ticketron/screens/organizer_screens/edit_event_screen.dart';
 import 'package:ticketron/services/events_services.dart';
 import 'package:ticketron/utils/constants.dart';
 import 'package:ticketron/utils/helpers.dart';
+import 'package:ticketron/widgets/event_details/event_location_widget.dart';
 
 class OrganizerEventDetails extends StatelessWidget {
   final Event event;
@@ -43,7 +44,8 @@ class OrganizerEventDetails extends StatelessWidget {
             const SizedBox(height: Constants.paddingMedium),
             EventStatisticsSection(event: event),
             const SizedBox(height: Constants.paddingMedium),
-            EventLocationSection(location: event.location),
+            EventLocationSection(location: event.location, latitude:5.7603 , longitude: 0.2199, ),
+
             const SizedBox(height: Constants.paddingMedium),
           ],
         ),
@@ -238,38 +240,6 @@ class StatCard extends StatelessWidget {
   }
 }
 
-class EventLocationSection extends StatelessWidget {
-  final String location;
-
-  const EventLocationSection({super.key, required this.location});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Location',
-          style: Constants.bodyText.copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: Constants.paddingSmall),
-        Text(
-          location,
-          style: Constants.bodyText,
-        ),
-        const SizedBox(height: Constants.paddingSmall),
-        // r map
-        Container(
-          height: 200,
-          color: Colors.grey[200],
-          child: const Center(child: Text('Map Placeholder')),
-        ),
-      ],
-    );
-  }
-}
-
-
 
 class ActionSection extends StatelessWidget {
   final Event event;
@@ -322,6 +292,7 @@ class ActionSection extends StatelessWidget {
 
           ElevatedButton(
             onPressed: () {
+              print(event.eventId);
               Navigator.push(
                 context,
                 MaterialPageRoute(

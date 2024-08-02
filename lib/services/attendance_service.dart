@@ -49,6 +49,28 @@ class EventAttendanceService {
     }
   }
 
+  // update attendance by userid and eventid
+  Future<void> updateAttendanceByUserIdAndEventId( String userId, String eventId)async {
+      final response = await http.put(
+      Uri.parse('$baseUrl/attendance/$userId/$eventId'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'attendanceStatus': 1,
+        'paymentStatus': 1,
+        'userId': userId,
+        'eventId':eventId
+      }),
+
+    );
+
+    print(response);
+
+    if (response.statusCode != 200) {
+      print(response);
+      throw Exception('Failed to update attendance record');
+    }
+  }
+
   Future<void> deleteAttendance(String id) async {
     final response = await http.delete(Uri.parse('$baseUrl/attendance/$id'));
 
@@ -59,6 +81,7 @@ class EventAttendanceService {
 
   Future<List<Map<String, dynamic>>> getAttendanceListForEvent(String eventId) async {
     final response = await http.get(Uri.parse('$baseUrl/attendance/event/$eventId'));
+    print(response.body);
 
     if (response.statusCode == 200) {
       return List<Map<String, dynamic>>.from(json.decode(response.body));

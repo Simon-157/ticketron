@@ -90,7 +90,8 @@ class _VerifyOrganizerPageState extends State<VerifyOrganizerPage> {
                   );
                 });
           } else {
-            _showErrorDialog("Verification Failed", "Invalid verification code. Please try again.");
+            print(res['message']);
+            _showErrorDialog("Verification Failed", "Invalid verification code or ${res['message']}. Please try again.");
           }
         } catch (error) {
           print(error.toString());

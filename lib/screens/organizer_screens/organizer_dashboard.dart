@@ -3,7 +3,6 @@ import 'package:ticketron/models/event_model.dart';
 import 'package:ticketron/models/organizer_model.dart';
 import 'package:ticketron/services/auth_service.dart';
 import 'package:ticketron/services/events_services.dart';
-// import 'package:ticketron/services/event_service.dart';
 import 'package:ticketron/widgets/organizer_view_widgets/organizer_bottom_nav.dart';
 import 'package:ticketron/widgets/organizer_view_widgets/organizer_event_card.dart';
 
@@ -18,8 +17,6 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
   final AuthService _authService = AuthService();
   final EventService _eventService = EventService();
   final Map<String, dynamic> _organizerStatistics = {};
-
-
 
   Organizer? organizer;
   List<Event> events = [];
@@ -56,19 +53,13 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
 
         print('Fetched events: $events');
       } catch (e) {
-        print('Failed to loa    cccd events: $e');
+        print('Failed to load events: $e');
         setState(() {
           isLoading = false;
         });
       }
     }
   }
-
-  //  'totalRevenue': revenue,
-  //         'totalSoldTickets': soldTickets,
-  //         'totalEvents': totalEvents,
-  //         'bestTicketType': bestTicketTypeData['bestTicketType'],
-  //         'bestTicketQuantity': bestTicketTypeData['quantity'],
 
   Future<void> _populateOrganizerStatistics() async {
     if (organizer != null) {
@@ -188,19 +179,19 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
                   _buildStatisticCard(
                     context,
                     title: 'Present',
-                    count: events.where((event) => event.date.isAfter(DateTime.now())).length,
+                    count: events.where((event) => event.date.isAfter(DateTime.now())).length.toDouble(),
                   ),
                   const SizedBox(width: 16.0),
                   _buildStatisticCard(
                     context,
                     title: 'Past',
-                    count: events.where((event) => event.date.isBefore(DateTime.now())).length,
+                    count: events.where((event) => event.date.isBefore(DateTime.now())).length.toDouble(),
                   ),
                   const SizedBox(width: 16.0),
                   _buildStatisticCard(
                     context,
                     title: 'Audience',
-                    count: _organizerStatistics['totalSoldTickets'] ?? 0,
+                    count: _organizerStatistics['totalSoldTickets']?.toDouble() ?? 0.0,
                   ),
                 ],
               ),
@@ -220,29 +211,20 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
                   _buildStatisticCard(
                     context,
                     title: 'Revenue',
-                    count: _organizerStatistics['totalRevenue'] ?? 0,
+                    count: _organizerStatistics['totalRevenue']?.toDouble() ?? 0.0,
                   ),
-                  // const SizedBox(width: 16.0),
-                  // _buildStatisticCard(
-                  //   context,
-                  //   title: 'Tickets Sold',
-                  //   count: _organizerStatistics['totalSoldTickets'] ?? 0,
-                  // ),
                   const SizedBox(width: 16.0),
                   _buildStatisticCard(
                     context,
                     title: 'Events',
-                    count: _organizerStatistics['totalEvents'] ?? 0,
+                    count: _organizerStatistics['totalEvents']?.toDouble() ?? 0.0,
                   ),
                   const SizedBox(width: 16.0),
                   _buildStatisticCard(
                     context,
-                    title: 'Highest ',
-                    count: _organizerStatistics['bestTicketQuantity'] ?? 0,
+                    title: 'Highest',
+                    count: _organizerStatistics['bestTicketQuantity']?.toDouble() ?? 0.0,
                   ),
-
-                 
-
                 ],
               ),
             ),
@@ -253,16 +235,15 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
     );
   }
 
-
   Widget buildEventCard(Event event) {
     return OrganizerEventCard(event: event);
   }
 
-  Widget _buildStatisticCard(context, {required String title, required int count}) {
+  Widget _buildStatisticCard(context, {required String title, required double count}) {
     return Container(
       padding: const EdgeInsets.all(8.0),
       width: MediaQuery.of(context).size.width * 0.3,
-      height: 80.0,
+      height: 85.0,
       decoration: BoxDecoration(
         color: Colors.blue[50],
         border: Border.all(color: Colors.blue),
@@ -284,62 +265,35 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
     );
   }
 
-
   void _showPopupMenu(BuildContext context, Offset tapPosition) {
     _controller.forward();
     showMenu<String>(
       context: context,
       position: RelativeRect.fromLTRB(
-        tapPosition.dx ,
+        tapPosition.dx,
         tapPosition.dy + 70,
         0,
         0,
       ),
       items: <PopupMenuEntry<String>>[
-        PopupMenuItem<String>(
-          value: 'settings',
-          child: FadeTransition(
-            opacity: _animation,
-            child: SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0, -0.5),
-                end: const Offset(0, 0),
-              ).animate(_animation),
-              child: const ListTile(
-                leading: Icon(Icons.settings),
-                title: Text('Settings'),
-              ),
-            ),
-          ),
-        ),
-        PopupMenuItem<String>(
-          value: 'logout',
-          child: FadeTransition(
-            opacity: _animation,
-            child: SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0, -0.5),
-                end: const Offset(0, 0),
-              ).animate(_animation),
-              child: const ListTile(
-                leading: Icon(Icons.logout),
-                title: Text('Logout'),
-              ),
-            ),
+        const PopupMenuItem<String>(
+          value: 'edit',
+          child: Row(
+            children: <Widget>[
+              Icon(Icons.edit, color: Colors.blue),
+              SizedBox(width: 10),
+              Text('Edit Profile'),
+            ],
           ),
         ),
         const PopupMenuItem<String>(
-          value: 'share',
-          child: ListTile(
-            leading: Icon(Icons.share),
-            title: Text('Share'),
-          ),
-        ),
-        const PopupMenuItem<String>(
-          value: 'remove',
-          child: ListTile(
-            leading: Icon(Icons.delete),
-            title: Text('Remove'),
+          value: 'signout',
+          child: Row(
+            children: <Widget>[
+              Icon(Icons.exit_to_app, color: Colors.red),
+              SizedBox(width: 10),
+              Text('Sign Out'),
+            ],
           ),
         ),
       ],
@@ -359,4 +313,5 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> wit
     _controller.dispose();
     super.dispose();
   }
+  
 }
