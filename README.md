@@ -2,6 +2,10 @@
 
 A Flutter application for browsing and purchasing tickets for events.
 
+[API](https://github.com/Simon-157/tiicketron-api)
+
+[Background Job](https://github.com/Simon-157/ticketron-bg-jobs)
+
 ## Features
 
 - User authentication (sign in, sign up)
